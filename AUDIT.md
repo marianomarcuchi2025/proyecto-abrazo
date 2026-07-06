@@ -171,3 +171,26 @@ Nada de lo que sigue sustituye eso.
 - Todo lo pendiente de las pasadas anteriores (notificación server-side
   con confirmación de entrega, persistencia real, autenticación, COPPA/
   GDPR-K, auditoría de seguridad independiente).
+
+---
+
+# Pasada 4: revisión crítica sin cambios nuevos solicitados
+
+El pedido de esta pasada repetía textualmente el de la pasada 3. En vez de
+rehacer trabajo ya hecho, se hizo una revisión crítica nueva sobre el
+código ya existente — y apareció un bug real.
+
+16. **Alertas de emergencia duplicadas por toques rápidos** (bug de
+    concurrencia, `emergencia.service.ts`): `activar()` no tenía guardia
+    contra llamadas concurrentes. Tres toques del botón "Sí, avisar" antes
+    de que el primer pedido de red resolviera disparaban 3 pedidos HTTP y
+    3 intentos de SMS/WhatsApp en paralelo — verificado con una prueba que
+    simula exactamente ese escenario (3 llamadas concurrentes con latencia
+    de red real de 200ms). Esto es relevante en concreto para el público
+    de esta app: la repetición motora ante ansiedad/impulsividad es un
+    patrón real, no una hipótesis de diseño. Corregido con un guard de
+    "envío en curso": si `activar()` se llama mientras hay un envío
+    pendiente, se devuelve la misma promesa en vez de iniciar uno nuevo.
+    Verificado con test automatizado y con el mismo script manual que
+    expuso el bug originalmente (antes: 3 llamadas concurrentes; después:
+    1 sola).

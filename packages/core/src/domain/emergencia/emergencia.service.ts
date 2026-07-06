@@ -32,6 +32,7 @@ export class ServicioEmergencia {
   private protocolo: ProtocoloEmergencia | null = null;
   private ready: Promise<void>;
   private network: NetworkService;
+  private enviando: Promise<ResultadoActivacion> | null = null;
 
   constructor(private storage: StorageProvider, private alertUrl: string = '/api/alertas-emergencia') {
     this.network = new NetworkService(storage);
@@ -69,6 +70,17 @@ export class ServicioEmergencia {
 
   async activar(): Promise<ResultadoActivacion> {
     await this.ready;
+
+    // BUG DE CONCURRENCIA encontrado al probar toques rápidos repetidos
+    // (relevante para perfiles con repetición motora/impulsividad ante
+    // ansiedad): sin este guard, 3 toques antes de que el primer pedido de
+    // red resolviera disparaban 3 alertas de red y 3 intentos de SMS/
+    // WhatsApp en paralelo. Ahora, si ya hay un envío en curso, se
+    // devuelve esa misma promesa en vez de iniciar uno nuevo.
+    if (this.enviando) {
+      return this.enviando;
+    }
+
     const now = Date.now();
 
     // BUG DE HONESTIDAD encontrado en esta pasada: el cooldown devolvía
@@ -84,10 +96,23 @@ export class ServicioEmergencia {
       return { canal: 'sin-configurar', confirmado: false };
     }
 
-    this.lastActivated = now;
     const contacto = this.protocolo.contactos[0];
     const mensaje = this.protocolo.mensajeSMS.replace('{nombre}', contacto.nombre);
+    this.lastActivated = now;
 
+    this.enviando = this.enviarAhora(contacto, mensaje, now);
+    try {
+      return await this.enviando;
+    } finally {
+      this.enviando = null;
+    }
+  }
+
+  private async enviarAhora(
+    contacto: ContactoEmergencia,
+    mensaje: string,
+    now: number
+  ): Promise<ResultadoActivacion> {
     /**
      * CORRECCIÓN DE SEGURIDAD (bug original más grave del documento):
      * antes se hacía `window.location.href = 'sms:...'` y eso se reportaba

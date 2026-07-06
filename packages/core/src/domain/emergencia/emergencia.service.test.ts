@@ -61,3 +61,31 @@ test('si el último intento FALLÓ, el cooldown no bloquea el reintento ni finge
   assert.equal(r3.canal, 'cooldown');
   assert.equal(r3.confirmado, true);
 });
+
+test('toques rápidos repetidos antes de resolver NO disparan alertas duplicadas', async () => {
+  let llamadas = 0;
+  let concurrentesActivas = 0;
+  let maxConcurrentes = 0;
+
+  (globalThis as Record<string, unknown>).fetch = async () => {
+    llamadas++;
+    concurrentesActivas++;
+    maxConcurrentes = Math.max(maxConcurrentes, concurrentesActivas);
+    await new Promise((r) => setTimeout(r, 50));
+    concurrentesActivas--;
+    return { ok: true, status: 200 };
+  };
+
+  const servicio = new ServicioEmergencia(new MemoryStorage(), 'http://test/api/alertas');
+  await servicio.configurarProtocolo({
+    contactos: [{ nombre: 'Ana', telefono: '5551234', relacion: 'madre' }],
+    mensajeSMS: 'Hola {nombre}',
+  });
+
+  const [r1, r2, r3] = await Promise.all([servicio.activar(), servicio.activar(), servicio.activar()]);
+
+  assert.equal(maxConcurrentes, 1, `se esperaba 1 pedido de red en vuelo, hubo ${maxConcurrentes}`);
+  assert.equal(llamadas, 1, `se esperaba 1 sola llamada de red, hubo ${llamadas}`);
+  assert.deepEqual(r1, r2);
+  assert.deepEqual(r2, r3);
+});
