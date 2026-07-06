@@ -111,11 +111,55 @@ export class PantallaAbrazo extends LitElement {
       padding: 12px;
       cursor: pointer;
     }
+    .header-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: -8px;
+    }
+    .boton-config {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .aviso-sin-config {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #a15c00;
+      background: #fff6e5;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .form-config {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .form-config input {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .guardar-btn {
+      background: var(--color-verde);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
   `;
 
   @state() private tier: DeviceTier = 'mid';
   @state() private feedbackMsg = '';
   @state() private showEmergencyConfirm = false;
+  @state() private showSettings = false;
+  @state() private tieneContacto = false;
+  @state() private nombreContacto = '';
+  @state() private telefonoContacto = '';
 
   private semaforo: SemaforoDelCuerpo;
   private emergencia: ServicioEmergencia;
@@ -132,51 +176,33 @@ export class PantallaAbrazo extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.tier = DeviceProfiler.getInstance().tier;
+    void this.emergencia.tieneProtocoloConfigurado().then((tiene) => {
+      this.tieneContacto = tiene;
+    });
   }
 
   render() {
     return html`
       <div class="contenedor">
-        <div class="titulo">🫂 Abrazo</div>
-
-        <button class="boton-principal" @click=${() => this._navegar('voz')}>
-          <span class="icono">🗣️</span> Quiero decir algo
-        </button>
-
-        <button class="boton-principal boton-abrazo" @click=${this._confirmarEmergencia}>
-          <span class="icono">🫂</span> Necesito un abrazo
-        </button>
-
-        <button class="boton-principal" @click=${() => this._navegar('regulacion')}>
-          <span class="icono">🧰</span> Ayúdame a calmarme
-        </button>
-
-        <div class="semaforo" role="group" aria-label="¿Cómo te sientes?">
+        <div class="header-row">
           <button
-            class="boton-semaforo verde"
-            style="background: var(--color-verde)"
-            aria-label="Me siento bien"
-            @click=${() => this._registrar('verde')}
+            class="boton-config"
+            aria-label="Configurar contacto de emergencia"
+            @click=${this._toggleSettings}
           >
-            🟢
-          </button>
-          <button
-            class="boton-semaforo amarillo"
-            style="background: var(--color-amarillo)"
-            aria-label="Me siento regular"
-            @click=${() => this._registrar('amarillo')}
-          >
-            🟡
-          </button>
-          <button
-            class="boton-semaforo rojo"
-            style="background: var(--color-rojo)"
-            aria-label="Me siento mal"
-            @click=${() => this._registrar('rojo')}
-          >
-            🔴
+            ⚙️
           </button>
         </div>
+
+        <div class="titulo">🫂 Abrazo</div>
+
+        ${!this.tieneContacto && !this.showSettings
+          ? html`<div class="aviso-sin-config">
+              Todavía no configuraste a quién avisar en una emergencia. Tocá ⚙️ arriba.
+            </div>`
+          : ''}
+
+        ${this.showSettings ? this._renderSettings() : this._renderPrincipal()}
 
         <div class="feedback" role="status" aria-live="polite">${this.feedbackMsg}</div>
 
@@ -193,6 +219,94 @@ export class PantallaAbrazo extends LitElement {
           : ''}
       </div>
     `;
+  }
+
+  private _renderPrincipal() {
+    return html`
+      <button class="boton-principal" @click=${() => this._navegar('voz')}>
+        <span class="icono">🗣️</span> Quiero decir algo
+      </button>
+
+      <button class="boton-principal boton-abrazo" @click=${this._confirmarEmergencia}>
+        <span class="icono">🫂</span> Necesito un abrazo
+      </button>
+
+      <button class="boton-principal" @click=${() => this._navegar('regulacion')}>
+        <span class="icono">🧰</span> Ayúdame a calmarme
+      </button>
+
+      <div class="semaforo" role="group" aria-label="¿Cómo te sientes?">
+        <button
+          class="boton-semaforo verde"
+          style="background: var(--color-verde)"
+          aria-label="Me siento bien"
+          @click=${() => this._registrar('verde')}
+        >
+          🟢
+        </button>
+        <button
+          class="boton-semaforo amarillo"
+          style="background: var(--color-amarillo)"
+          aria-label="Me siento regular"
+          @click=${() => this._registrar('amarillo')}
+        >
+          🟡
+        </button>
+        <button
+          class="boton-semaforo rojo"
+          style="background: var(--color-rojo)"
+          aria-label="Me siento mal"
+          @click=${() => this._registrar('rojo')}
+        >
+          🔴
+        </button>
+      </div>
+    `;
+  }
+
+  private _renderSettings() {
+    return html`
+      <div class="form-config">
+        <p>¿A quién avisamos si necesitás un abrazo?</p>
+        <input
+          type="text"
+          placeholder="Nombre (ej: Mamá)"
+          .value=${this.nombreContacto}
+          @input=${(e: InputEvent) => (this.nombreContacto = (e.target as HTMLInputElement).value)}
+        />
+        <input
+          type="tel"
+          placeholder="Teléfono (ej: 5491122334455)"
+          .value=${this.telefonoContacto}
+          @input=${(e: InputEvent) => (this.telefonoContacto = (e.target as HTMLInputElement).value)}
+        />
+        <button class="guardar-btn" @click=${this._guardarContacto}>Guardar</button>
+        <button class="cancel-btn" @click=${this._toggleSettings}>Cerrar</button>
+      </div>
+    `;
+  }
+
+  private _toggleSettings() {
+    this.showSettings = !this.showSettings;
+  }
+
+  private async _guardarContacto() {
+    const nombre = this.nombreContacto.trim();
+    const telefono = this.telefonoContacto.trim();
+    if (!nombre || !telefono) {
+      this.feedbackMsg = 'Completá nombre y teléfono para guardar.';
+      return;
+    }
+    await this.emergencia.configurarProtocolo({
+      contactos: [{ nombre, telefono, relacion: 'contacto principal' }],
+      mensajeSMS: 'Hola {nombre}, necesito un abrazo. ¿Podés venir?',
+    });
+    this.tieneContacto = true;
+    this.showSettings = false;
+    this.feedbackMsg = `Listo, avisamos a ${nombre} si lo necesitás.`;
+    setTimeout(() => {
+      this.feedbackMsg = '';
+    }, 3000);
   }
 
   private _navegar(destino: 'voz' | 'regulacion') {

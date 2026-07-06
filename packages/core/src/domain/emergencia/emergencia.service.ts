@@ -46,8 +46,24 @@ export class ServicioEmergencia {
   }
 
   async configurarProtocolo(protocolo: ProtocoloEmergencia): Promise<void> {
+    // BUG encontrado al correr los tests (no era visible leyendo el código):
+    // si esto se llamaba antes de que terminara la carga inicial del
+    // constructor (`cargarProtocolo()`), esa carga podía resolver *después*
+    // y pisar `this.protocolo` con `null`, perdiendo el contacto recién
+    // guardado. Esperar `this.ready` primero fuerza el orden correcto.
+    await this.ready;
     this.protocolo = protocolo;
     await this.storage.setItem('emergencia-protocolo', JSON.stringify(protocolo));
+  }
+
+  async tieneProtocoloConfigurado(): Promise<boolean> {
+    await this.ready;
+    return !!this.protocolo && this.protocolo.contactos.length > 0;
+  }
+
+  async obtenerProtocolo(): Promise<ProtocoloEmergencia | null> {
+    await this.ready;
+    return this.protocolo;
   }
 
   async activar(): Promise<ResultadoActivacion> {
