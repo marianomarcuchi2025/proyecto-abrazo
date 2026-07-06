@@ -28,6 +28,7 @@ interface SemaforoEventoLike {
 
 export class ServicioEmergencia {
   private lastActivated = 0;
+  private lastConfirmado = false;
   private protocolo: ProtocoloEmergencia | null = null;
   private ready: Promise<void>;
   private network: NetworkService;
@@ -70,7 +71,13 @@ export class ServicioEmergencia {
     await this.ready;
     const now = Date.now();
 
-    if (now - this.lastActivated < COOLDOWN_MS) {
+    // BUG DE HONESTIDAD encontrado en esta pasada: el cooldown devolvía
+    // "confirmado: true" incondicionalmente, incluso si el intento anterior
+    // había FALLADO — la app decía "ya viene el abrazo" sobre un aviso que
+    // nunca salió, y encima bloqueaba el reintento justo cuando más se
+    // necesitaba. Ahora el cooldown solo aplica si el último intento fue
+    // realmente confirmado por el backend.
+    if (this.lastConfirmado && now - this.lastActivated < COOLDOWN_MS) {
       return { canal: 'cooldown', confirmado: true };
     }
     if (!this.protocolo || this.protocolo.contactos.length === 0) {
@@ -101,6 +108,7 @@ export class ServicioEmergencia {
       contacto: { nombre: contacto.nombre, telefono: contacto.telefono },
       timestamp: now,
     });
+    this.lastConfirmado = confirmadoPorRed;
 
     this.intentarCanalesDirectos(contacto.telefono, mensaje);
 

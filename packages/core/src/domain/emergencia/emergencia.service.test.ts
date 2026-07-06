@@ -30,3 +30,34 @@ test('activar() sin contactos devuelve sin-configurar', async () => {
   assert.equal(res.canal, 'sin-configurar');
   assert.equal(res.confirmado, false);
 });
+
+test('si el último intento FALLÓ, el cooldown no bloquea el reintento ni finge éxito', async () => {
+  let redDisponible = false;
+  (globalThis as Record<string, unknown>).fetch = async () => {
+    if (!redDisponible) throw new Error('red caída');
+    return { ok: true, status: 200 };
+  };
+
+  const servicio = new ServicioEmergencia(new MemoryStorage(), 'http://test/api/alertas');
+  await servicio.configurarProtocolo({
+    contactos: [{ nombre: 'Ana', telefono: '5551234', relacion: 'madre' }],
+    mensajeSMS: 'Hola {nombre}',
+  });
+
+  // Primer intento: la red falla -> no confirmado.
+  const r1 = await servicio.activar();
+  assert.equal(r1.canal, 'red');
+  assert.equal(r1.confirmado, false);
+
+  // Reintento inmediato (dentro de los 30s): NO debe devolver 'cooldown'
+  // (el bug original respondía "ya viene el abrazo" sobre un aviso fallido).
+  redDisponible = true;
+  const r2 = await servicio.activar();
+  assert.equal(r2.canal, 'red');
+  assert.equal(r2.confirmado, true);
+
+  // Ahora sí: tras un envío CONFIRMADO, el cooldown aplica.
+  const r3 = await servicio.activar();
+  assert.equal(r3.canal, 'cooldown');
+  assert.equal(r3.confirmado, true);
+});
