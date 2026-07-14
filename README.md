@@ -7,6 +7,8 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-99%25-3178c6.svg)](https://github.com/marianomarcuchi2025/proyecto-abrazo)
 [![Estado](https://img.shields.io/badge/estado-MVP%20%2F%20prototipo-orange.svg)](#-estado-del-proyecto)
 
+"Millones de niños tienen dificultades para expresar cómo se sienten. Proyecto Abrazo busca ofrecer herramientas abiertas, accesibles y transparentes para acompañar la regulación emocional de forma segura."
+
 **App web de apoyo emocional para niños** — pensada especialmente para niños
 en el espectro autista. Incluye un "semáforo del cuerpo" para registrar cómo
 se sienten, un botón de emergencia que avisa a un adulto de confianza, y
@@ -17,7 +19,8 @@ para autismo (GOV.UK, W3C COGA).
 > children — regulate their emotions: a "body traffic light" for emotional
 > check-ins, an emergency button that alerts a trusted adult, and guided
 > breathing. Built following published autism-friendly design guidelines
-> (GOV.UK autism design poster, W3C COGA). **Status: MVP / prototype — not
+> (GOV.UK autism design poster, W3C COGA).
+> **Status: MVP / prototype — not
 > clinically validated yet.** Contributions from clinicians, accessibility
 > experts and developers are very welcome.
 
