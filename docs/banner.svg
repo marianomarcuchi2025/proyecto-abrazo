@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" role="img" aria-label="Proyecto Abrazo: app de apoyo emocional para niños">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef6f4"/>
+      <stop offset="1" stop-color="#e8eaf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="320" fill="url(#bg)"/>
+
+  <!-- Corazón abrazado -->
+  <g transform="translate(120,70)">
+    <circle cx="90" cy="90" r="88" fill="#ffffff" stroke="#b7cfc9" stroke-width="2"/>
+    <path d="M90 130 C60 105 42 88 42 66 C42 50 55 40 68 40 C78 40 86 46 90 54 C94 46 102 40 112 40 C125 40 138 50 138 66 C138 88 120 105 90 130 Z"
+          fill="#7fb3a8"/>
+    <!-- brazos que abrazan -->
+    <path d="M28 96 Q50 148 90 152 Q130 148 152 96" fill="none"
+          stroke="#5c7fa3" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <!-- Semáforo del cuerpo -->
+  <g transform="translate(340,88)">
+    <rect x="0" y="0" width="52" height="144" rx="26" fill="#ffffff" stroke="#b7cfc9" stroke-width="2"/>
+    <circle cx="26" cy="30"  r="16" fill="#d98880"/>
+    <circle cx="26" cy="72"  r="16" fill="#e6c47a"/>
+    <circle cx="26" cy="114" r="16" fill="#8fbf8f"/>
+  </g>
+
+  <!-- Texto -->
+  <g font-family="Segoe UI, Verdana, sans-serif">
+    <text x="450" y="140" font-size="58" font-weight="700" fill="#3d5a6c">Proyecto Abrazo</text>
+    <text x="452" y="185" font-size="24" fill="#5c7264">Apoyo emocional para niños · pensado para el espectro autista</text>
+    <text x="452" y="222" font-size="19" fill="#7a8a80">Semáforo del cuerpo · Botón de emergencia · Respiración guiada</text>
+    <text x="452" y="262" font-size="16" fill="#9aa8a0">Código abierto (AGPL-3.0) · MVP — aún sin validación clínica</text>
+  </g>
+</svg>
