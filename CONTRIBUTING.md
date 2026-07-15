@@ -10,6 +10,9 @@ en el espectro autista — a regular sus emociones. Toda ayuda cuenta.
 1. **Revisión clínica** — si sos terapista ocupacional, psicólogo/a infantil
    o profesional afín: abrí un issue con la etiqueta `clinical-review` con
    tus observaciones sobre el flujo de emergencia y el lenguaje de la app.
+   No hace falta leer código: [`docs/REVISION_CLINICA_PENDIENTE.md`](docs/REVISION_CLINICA_PENDIENTE.md)
+   tiene el texto exacto que ve un niño en cada pantalla y preguntas puntuales
+   para responder.
 2. **Accesibilidad** — auditorías contra WCAG 2.2 / W3C COGA.
 3. **Código** — ver los pendientes en el README ("Antes de considerar esto
    listo para familias reales").

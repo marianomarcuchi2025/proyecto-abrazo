@@ -364,3 +364,37 @@ API key incorrecto devuelve `confirmado: false` sin tirar excepción.
 - Sigue sin validación clínica del flujo de crisis, sin cumplimiento
   normativo formal para datos de menores, y sin las demás pendientes ya
   documentadas en pasadas anteriores.
+
+## Pasada 7 — Cobertura de tests visible (2026-07-14)
+
+Contexto: investigación comparativa contra proyectos populares de dominios
+adyacentes (AAC/autismo, salud mental abierta — ver
+`INVESTIGACION_REPOS_POPULARES_Y_ROADMAP.md`) identificó que Abrazo tenía
+26 tests reales pero ningún número de cobertura reportado en ningún lado.
+Los 26 tests podían estar cubriendo un 30% del código o un 95% — nadie
+podía saberlo sin correrlo manualmente con flags experimentales.
+
+26. **`npm run test:coverage`** (raíz, y `test:coverage` en `core` y
+    `server` individualmente): agrega `--experimental-test-coverage` al
+    mismo comando `node --test` que ya se usaba, sin tocar el `test`
+    normal que corre CI. Cobertura real medida el 2026-07-14:
+    - `core`: 90.64% líneas, 84.25% branches, 87.67% funciones.
+    - `server`: 93.47% líneas, 71.74% branches, 80.82% funciones.
+    - `ui-nino`: sin número — no tiene tests (gap ya documentado, punto
+      25/gap #20).
+    Estos números se agregaron al `README.md` como tabla, no como
+    insignia de servicio externo (no hay Code Climate ni Codecov
+    configurado — eso requeriría una cuenta externa que nadie pidió).
+
+## Qué NO se hizo en esta pasada
+
+- No se subió cobertura a un servicio externo (Codecov/Code Climate) ni
+  se agregó una insignia de cobertura al README — el número está en una
+  tabla de texto plano, exacto y fechado, en vez de una insignia que
+  puede quedar desactualizada o mentir si nadie la mantiene.
+- No se tocó el script `test` que usa CI — `test:coverage` es aditivo,
+  para no cambiar el comportamiento ni la salida que ya dependen otros
+  workflows.
+- Sigue pendiente todo lo de pasadas anteriores, empezando por la
+  revisión clínica del flujo de crisis (ver
+  `INVESTIGACION_REPOS_POPULARES_Y_ROADMAP.md`, prioridad 1).

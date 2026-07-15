@@ -5,7 +5,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "npm run build && DATA_DIR=./data/.testrun node --test dist/server.test.js dist/persistence.test.js"
+    "test": "npm run build && DATA_DIR=./data/.testrun node --test dist/server.test.js dist/persistence.test.js",
+    "test:coverage": "npm run build && DATA_DIR=./data/.testrun node --test --experimental-test-coverage dist/server.test.js dist/persistence.test.js"
   },
   "dependencies": {
     "@abrazo/core": "*",

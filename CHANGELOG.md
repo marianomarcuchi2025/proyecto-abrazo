@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 7: cobertura de tests visible
+
+### Agregado
+- Script `test:coverage` en `core`, `server` y el paquete raíz (`npm run test:coverage`), usando `node --test --experimental-test-coverage`. Reporta cobertura real de líneas/branches/funciones por archivo, no una insignia.
+- Tabla de cobertura real en `README.md` (90.64% líneas en `core`, 93.47% en `server`, medida el 2026-07-14). `ui-nino` queda explícitamente fuera de la tabla porque no tiene tests todavía — se documenta como ausencia intencional, no se inventa un número.
+
 ## [Unreleased] — Pasada 6: persistencia, autenticación y optimización
 
 ### Agregado

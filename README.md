@@ -49,12 +49,22 @@ Requisitos: [Node.js 20+](https://nodejs.org) y npm 10+. No hace falta Docker, P
 
 ```bash
 npm install
-npm run build   # compila los 3 paquetes (core, server, ui-nino)
-npm test        # corre los 26 tests de core y server
-npm run dev     # levanta ui-nino en :3000 y server en :3001 en paralelo
+npm run build          # compila los 3 paquetes (core, server, ui-nino)
+npm test                # corre los 26 tests de core y server
+npm run test:coverage   # mismos 26 tests + reporte de cobertura real (node --test --experimental-test-coverage)
+npm run dev             # levanta ui-nino en :3000 y server en :3001 en paralelo
 ```
 
 Abrí <http://localhost:3000> en el navegador. El servidor expone `GET /api/health` para verificar que está vivo.
+
+**Cobertura real** (medida con `npm run test:coverage` el 2026-07-14, no una insignia — números exactos, uncovered lines incluidas en la salida del comando):
+
+| Paquete | Líneas | Branches | Funciones |
+| :--- | ---: | ---: | ---: |
+| `core` | 90.64% | 84.25% | 87.67% |
+| `server` | 93.47% | 71.74% | 80.82% |
+
+`ui-nino` sigue sin tests automatizados (ver "Antes de considerar esto listo para familias reales" más abajo), así que no tiene número de cobertura — omitirlo de la tabla es intencional, no un olvido.
 
 Por defecto el servidor arranca **sin autenticación** (imprime una advertencia). Para protegerlo con un API key compartido, ver `.env.example` — copiarlo a `.env`, generar un valor para `API_KEY` (y el mismo valor en `VITE_API_KEY` para que el frontend lo mande), y reiniciar.
 
