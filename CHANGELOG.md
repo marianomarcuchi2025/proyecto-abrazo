@@ -1,0 +1,58 @@
+# Changelog
+
+Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
+
+## [Unreleased] — Pasada 6: persistencia, autenticación y optimización
+
+### Agregado
+- **Persistencia real en disco** (`packages/server/src/persistence.ts`, `JsonFileStore`): postales y alertas ya no viven en un array en memoria que se perdía al reiniciar el proceso; se guardan en `data/postales.json` y `data/alertas.json` con escritura atómica. No es una base de datos transaccional, pero sobrevive reinicios — cierra el punto 10 de `AUDIT.md`.
+- **Autenticación opcional por API key compartido**: si se define `API_KEY`, todos los endpoints `/api/*` exigen `Authorization: Bearer <clave>` (comparación en tiempo constante contra timing attacks). Sin `API_KEY`, el servidor arranca abierto e imprime una advertencia explícita.
+- **Notificación a todos los contactos de emergencia configurados**, no solo al primero (`ServicioEmergencia`, gap #19 de `AUDIT.md` Pasada 5). La UI ahora permite configurar un segundo contacto opcional.
+- **Confirmación tardía de mensajes encolados offline**: cuando un aviso de emergencia se encola por falta de conexión y `NetworkService` lo entrega más tarde, se emite un evento (`network.entregado-tarde` → `emergencia.confirmado-tarde`) que la pantalla usa para avisar al usuario que el mensaje finalmente salió — cierra el gap #18 de `AUDIT.md` Pasada 5.
+- **`packages/core/src/domain/regulacion/respiracion.ts`**: el ciclo de respiración guiada 4-2-6 se extrajo del componente Lit a lógica pura testeable, con 4 tests nuevos.
+- Tests HTTP end-to-end para el servidor (auth, persistencia, multi-contacto) y tests directos de `JsonFileStore`: 12 tests nuevos en `server`, 6 tests nuevos en `core`. Total: 26 tests automatizados (antes 11).
+- `.env.example` documenta `DATA_DIR`, `API_KEY` y `VITE_API_KEY`.
+
+### Corregido
+- `README.md` había sido reemplazado por una versión con arquitectura y funcionalidades inventadas (React/Next.js, PostgreSQL, Docker, autenticación 2FA, exportación HIPAA/GDPR, etc.) que no existían en el código. Restaurado a una versión alineada con el repo real, y ahora actualizado con las capacidades reales agregadas en esta pasada. Ver `AUDIT.md`, Pasada 5.
+- Contradicción de licencia: el README afirmaba MIT en el FAQ; la licencia real del proyecto es AGPL-3.0-only.
+- `CHANGELOG.md` (este archivo) no existía pese a estar enlazado desde el README.
+
+## [0.1.0] - 2026-07-06 a 2026-07-14
+
+MVP inicial del monorepo (`core`, `ui-nino`, `server`), con cuatro pasadas de auditoría documentadas en `AUDIT.md`.
+
+### Agregado
+- Monorepo funcional con npm workspaces + Lerna: `packages/core` (dominio), `packages/ui-nino` (Lit + Vite), `packages/server` (Express).
+- Servicio de emergencia (`ServicioEmergencia`) con confirmación real vía backend, cooldown honesto y guard contra activaciones concurrentes por toques rápidos.
+- `SemaforoDelCuerpo`: registro de estado emocional con historial acotado en memoria y persistencia local.
+- `SecureStorage`: cifrado AES-GCM 256 real (Web Crypto API) para el storage local del cliente.
+- `NetworkService`: cola offline-first con reintento y reencolado en caso de fallo parcial de lote.
+- Backend Express con filtro recursivo de datos biométricos, CORS restringido por variable de entorno, rate limiting y endpoint `/api/alertas-emergencia` como única fuente de verdad de confirmación.
+- Pantalla principal (`pantalla-abrazo.ts`) adaptada a guía GOV.UK/W3C-COGA para niños autistas: lenguaje literal, vibración opt-in, respiración guiada con soporte de `prefers-reduced-motion`.
+- Panel de ajustes para configurar el contacto de emergencia.
+- CI en GitHub Actions (`npm ci && npm run build && npm test`) contra Node 20.x y 22.x.
+- `LICENSE` (AGPL-3.0-only), `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, templates de issues/PR.
+
+### Corregido (ver `AUDIT.md` para el detalle completo de cada punto)
+- Typo que rompía el build (`export * from './shared.secure-storage'`).
+- Falso positivo de éxito en el canal de emergencia (SMS que nunca lanza excepción aunque no se envíe).
+- Pérdida silenciosa de mensajes en cola de red al fallar un envío a mitad de lote.
+- `SecureStorage` que en realidad no cifraba nada (Base64 reversible).
+- Filtro de datos biométricos evadible con payloads anidados.
+- CORS abierto por defecto (`origin: '*'`).
+- Cola de red que no se vaciaba al iniciar si ya había conexión.
+- Array en memoria del servidor sin límite (fuga de memoria).
+- Cooldown de emergencia que confirmaba envíos que en realidad habían fallado.
+- Mensaje de UI que prometía algo no verificable ("viene un abrazo") en vez de lenguaje literal.
+- Botones sin función ("Quiero decir algo", "Ayúdame a calmarme" antes de implementar la respiración).
+- Alertas de emergencia duplicadas por toques rápidos repetidos (condición de carrera en `activar()`).
+
+### Conocido / no resuelto (intencional, documentado)
+- Sin base de datos transaccional real (persistencia en archivos JSON desde Pasada 6, sin locking entre procesos).
+- Sin cuentas de usuario ni identidad por dispositivo/familia (solo API key compartido por instancia desde Pasada 6).
+- Sin notificación server-side con confirmación de entrega real (SMS/push) — la confirmación tardía de Pasada 6 avisa cuando la propia cola offline del cliente entrega, no agrega un canal server-side nuevo.
+- Sin cumplimiento normativo formal para datos de menores (COPPA/GDPR-K).
+- Sin validación clínica del flujo de crisis.
+- `ui-nino` sin tests de interfaz/DOM (la lógica pura que se pudo extraer, como la respiración, sí tiene tests desde Pasada 6).
+- Máximo dos contactos de emergencia configurables desde la UI (decisión de simplicidad, no limitación técnica del modelo de datos).

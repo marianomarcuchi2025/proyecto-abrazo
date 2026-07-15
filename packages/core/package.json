@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "npm run build && node --test dist/domain/emergencia/emergencia.service.test.js dist/domain/regulacion/semaforo.service.test.js"
+    "test": "npm run build && node --test dist/domain/emergencia/emergencia.service.test.js dist/domain/regulacion/semaforo.service.test.js dist/domain/regulacion/respiracion.test.js dist/shared/network.service.test.js"
   },
   "devDependencies": {
     "typescript": "^5.4.0"

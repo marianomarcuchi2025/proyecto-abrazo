@@ -1,6 +1,6 @@
 import { StorageProvider } from '../../shared/storage.js';
 import { EventBus } from '../../shared/event-bus.js';
-import { NetworkService } from '../../shared/network.service.js';
+import { NetworkService, EntregaTardia } from '../../shared/network.service.js';
 
 export interface ContactoEmergencia {
   nombre: string;
@@ -20,6 +20,11 @@ export type ResultadoActivacion =
   | { canal: 'red'; confirmado: boolean }
   | { canal: 'sin-configurar'; confirmado: false };
 
+/** Emitido cuando un aviso que se había encolado offline finalmente llega al servidor. */
+export interface EmergenciaConfirmadaTarde {
+  contactos: ContactoEmergencia[];
+}
+
 const COOLDOWN_MS = 30_000;
 
 interface SemaforoEventoLike {
@@ -34,8 +39,12 @@ export class ServicioEmergencia {
   private network: NetworkService;
   private enviando: Promise<ResultadoActivacion> | null = null;
 
-  constructor(private storage: StorageProvider, private alertUrl: string = '/api/alertas-emergencia') {
-    this.network = new NetworkService(storage);
+  constructor(
+    private storage: StorageProvider,
+    private alertUrl: string = '/api/alertas-emergencia',
+    apiKey?: string
+  ) {
+    this.network = new NetworkService(storage, apiKey);
     this.ready = this.cargarProtocolo();
 
     EventBus.getInstance().on<SemaforoEventoLike>('semaforo.cambio', (registro) => {
@@ -44,6 +53,20 @@ export class ServicioEmergencia {
           '[Emergencia] Semáforo en rojo detectado. No se activa la alerta automáticamente: se requiere confirmación explícita del usuario en el modal.'
         );
       }
+    });
+
+    // GAP ENCONTRADO EN PASADA 5: si activar() encolaba el aviso offline
+    // (confirmado: false, correcto en ese momento), nadie se enteraba
+    // cuando NetworkService lo entregaba con éxito más tarde. Escuchamos
+    // el evento que dispara NetworkService.flushQueue() en ese caso y, si
+    // es efectivamente una alerta de emergencia nuestra, actualizamos el
+    // estado interno y re-emitimos un evento propio para que la UI pueda
+    // avisarle al niño/adulto que el aviso finalmente salió.
+    EventBus.getInstance().on<EntregaTardia>('network.entregado-tarde', (evt) => {
+      if (evt?.meta?.tipo !== 'alerta-emergencia') return;
+      this.lastConfirmado = true;
+      const contactos = (evt.meta.contactos as ContactoEmergencia[]) ?? [];
+      EventBus.getInstance().dispatch<EmergenciaConfirmadaTarde>('emergencia.confirmado-tarde', { contactos });
     });
   }
 
@@ -96,11 +119,11 @@ export class ServicioEmergencia {
       return { canal: 'sin-configurar', confirmado: false };
     }
 
-    const contacto = this.protocolo.contactos[0];
-    const mensaje = this.protocolo.mensajeSMS.replace('{nombre}', contacto.nombre);
+    const contactos = this.protocolo.contactos;
+    const mensajePlantilla = this.protocolo.mensajeSMS;
     this.lastActivated = now;
 
-    this.enviando = this.enviarAhora(contacto, mensaje, now);
+    this.enviando = this.enviarAhora(contactos, mensajePlantilla, now);
     try {
       return await this.enviando;
     } finally {
@@ -109,8 +132,8 @@ export class ServicioEmergencia {
   }
 
   private async enviarAhora(
-    contacto: ContactoEmergencia,
-    mensaje: string,
+    contactos: ContactoEmergencia[],
+    mensajePlantilla: string,
     now: number
   ): Promise<ResultadoActivacion> {
     /**
@@ -127,15 +150,27 @@ export class ServicioEmergencia {
      * abrir la app de SMS/WhatsApp se sigue disparando como ayuda
      * adicional para el adulto que esté cerca, pero nunca como fuente de
      * verdad de que la alerta llegó a alguien.
+     *
+     * GAP CORREGIDO EN PASADA 5: antes solo se notificaba a
+     * `contactos[0]`, aunque el modelo de datos siempre soportó varios
+     * contactos. Ahora se envía un único pedido al backend con todos los
+     * contactos configurados (para que el servidor sepa a quiénes avisar),
+     * y se intenta el canal directo de SMS/WhatsApp para cada uno.
      */
-    const confirmadoPorRed = await this.network.request(this.alertUrl, {
-      tipo: 'alerta-emergencia',
-      contacto: { nombre: contacto.nombre, telefono: contacto.telefono },
-      timestamp: now,
-    });
+    const confirmadoPorRed = await this.network.request(
+      this.alertUrl,
+      {
+        contactos: contactos.map((c) => ({ nombre: c.nombre, telefono: c.telefono })),
+        timestamp: now,
+      },
+      { tipo: 'alerta-emergencia', contactos }
+    );
     this.lastConfirmado = confirmadoPorRed;
 
-    this.intentarCanalesDirectos(contacto.telefono, mensaje);
+    for (const contacto of contactos) {
+      const mensaje = mensajePlantilla.replace('{nombre}', contacto.nombre);
+      this.intentarCanalesDirectos(contacto.telefono, mensaje);
+    }
 
     return { canal: 'red', confirmado: confirmadoPorRed };
   }
