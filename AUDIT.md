@@ -437,17 +437,16 @@ Aucards/cboard, sin construir un editor de tableros completo.
     emergencia) — la única llamada de red es cargar la imagen del
     pictograma.
 
-### Limitaciones honestas de esta pasada
+### Limitaciones (actualizado tras verificación)
 
-- **No pude verificar visualmente que las imágenes cargan bien.** Este
-  entorno de auditoría no tiene acceso de red a `api.arasaac.org` para
-  binarios (mismo tipo de restricción de sandbox que bloqueó Playwright
-  en pasadas anteriores) — solo pude confirmar por la API JSON de
-  ARASAAC que los IDs de pictograma son reales y corresponden a las
-  palabras buscadas. La app en un navegador real con internet sí debería
-  cargarlas (es el patrón de URL público documentado de ARASAAC), pero
-  esto queda pendiente de que alguien lo confirme visualmente corriendo
-  `npm run dev`.
+- **Verificado en un navegador real (2026-07-14):** se corrió
+  `npm install && npm run dev` en una máquina con internet real (no en
+  este entorno de auditoría, que no tiene salida de red a
+  `api.arasaac.org`) y se confirmó por script en la consola del
+  navegador que las 6 imágenes cargan (`complete: true`,
+  `naturalWidth: 500`, `naturalHeight: 500` para las seis), y que la
+  vista de detalle (símbolo agrandado + texto) funciona al tocar cada
+  una. Ya no es una limitación abierta.
 - **Depende de conexión a internet real y de un tercero (ARASAAC)**, a
   diferencia del resto de la app que es self-hosted. Cada vez que el
   niño toca un símbolo, el navegador hace una petición a
