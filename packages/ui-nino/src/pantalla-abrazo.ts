@@ -6,6 +6,9 @@ import {
   SemaforoDelCuerpo,
   EstadoSemaforo,
   ServicioEmergencia,
+  EventBus,
+  faseEnPaso,
+  type EmergenciaConfirmadaTarde,
 } from '@abrazo/core';
 
 /**
@@ -34,6 +37,17 @@ import {
  *    grito). Sentence case.
  * 7. "Ayúdame a calmarme" ahora funciona: guía de respiración simple, que
  *    respeta prefers-reduced-motion (sin animación si el sistema lo pide).
+ *    El ciclo de fases vive en @abrazo/core (domain/regulacion/respiracion.ts)
+ *    para poder testearlo sin DOM.
+ * 8. Se puede configurar un segundo contacto de emergencia opcional
+ *    (PASADA 5/6: antes solo se notificaba al primero configurado aunque
+ *    el modelo de datos soportaba varios; ver AUDIT.md). Se limita a dos
+ *    por ahora — no una lista sin límite — para no complicar el formulario
+ *    que llena un adulto, potencialmente apurado, en una pantalla chica.
+ * 9. Si un aviso se había encolado por falta de conexión y se entrega más
+ *    tarde, la pantalla lo comunica (evento 'emergencia.confirmado-tarde'
+ *    de @abrazo/core) en vez de dejar al niño sin saber si finalmente
+ *    llegó o no.
  */
 
 type Vista = 'principal' | 'ajustes' | 'calma';
@@ -201,6 +215,16 @@ export class PantallaAbrazo extends LitElement {
       font-size: 1rem;
       background: white;
     }
+    .separador-config {
+      border: none;
+      border-top: 1px solid #e3e0d8;
+      margin: 6px 0;
+    }
+    .subtitulo-config {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+    }
     .fila-check {
       display: flex;
       align-items: center;
@@ -252,9 +276,11 @@ export class PantallaAbrazo extends LitElement {
   @state() private feedbackMsg = '';
   @state() private showEmergencyConfirm = false;
   @state() private tieneContacto = false;
-  @state() private nombreGuardado = '';
+  @state() private nombresGuardados: string[] = [];
   @state() private nombreContacto = '';
   @state() private telefonoContacto = '';
+  @state() private nombreContacto2 = '';
+  @state() private telefonoContacto2 = '';
   @state() private vibracionActivada = false;
   @state() private textoRespiracion = '';
   @state() private circuloGrande = false;
@@ -262,12 +288,18 @@ export class PantallaAbrazo extends LitElement {
   private semaforo: SemaforoDelCuerpo;
   private emergencia: ServicioEmergencia;
   private timerRespiracion: number | undefined;
+  private onConfirmacionTardia = (evt: EmergenciaConfirmadaTarde) => {
+    const nombres = evt.contactos.map((c) => c.nombre).join(' y ');
+    this.feedbackMsg = `Aviso a ${nombres || 'tu adulto'} confirmado (se envió apenas volvió la conexión).`;
+    this._vibrar([100, 50, 200]);
+  };
 
   constructor() {
     super();
     const storage = new SecureStorage(new BrowserStorage());
+    const apiKey = (import.meta.env.VITE_API_KEY as string | undefined) || undefined;
     this.semaforo = new SemaforoDelCuerpo(storage);
-    this.emergencia = new ServicioEmergencia(storage);
+    this.emergencia = new ServicioEmergencia(storage, undefined, apiKey);
   }
 
   connectedCallback(): void {
@@ -277,16 +309,22 @@ export class PantallaAbrazo extends LitElement {
     void this.emergencia.obtenerProtocolo().then((protocolo) => {
       if (protocolo && protocolo.contactos.length > 0) {
         this.tieneContacto = true;
-        this.nombreGuardado = protocolo.contactos[0].nombre;
+        this.nombresGuardados = protocolo.contactos.map((c) => c.nombre);
         this.nombreContacto = protocolo.contactos[0].nombre;
         this.telefonoContacto = protocolo.contactos[0].telefono;
+        if (protocolo.contactos[1]) {
+          this.nombreContacto2 = protocolo.contactos[1].nombre;
+          this.telefonoContacto2 = protocolo.contactos[1].telefono;
+        }
       }
     });
+    EventBus.getInstance().on<EmergenciaConfirmadaTarde>('emergencia.confirmado-tarde', this.onConfirmacionTardia);
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this._detenerRespiracion();
+    EventBus.getInstance().off('emergencia.confirmado-tarde', this.onConfirmacionTardia as (data: unknown) => void);
   }
 
   render() {
@@ -320,7 +358,7 @@ export class PantallaAbrazo extends LitElement {
           ? html`
               <div class="modal-overlay" @click=${this._cancelarEmergencia}>
                 <div class="modal-content" @click=${(e: Event) => e.stopPropagation()}>
-                  <p>¿Quieres avisar a ${this.nombreGuardado || 'tu adulto'}?</p>
+                  <p>¿Quieres avisar a ${this.nombresGuardados.join(' y ') || 'tu adulto'}?</p>
                   <button class="confirm-btn" @click=${this._pedirAbrazo}>Sí, avisar</button>
                   <button class="cancel-btn" @click=${this._cancelarEmergencia}>No, volver</button>
                 </div>
@@ -397,6 +435,25 @@ export class PantallaAbrazo extends LitElement {
           .value=${this.telefonoContacto}
           @input=${(e: InputEvent) => (this.telefonoContacto = (e.target as HTMLInputElement).value)}
         />
+
+        <hr class="separador-config" />
+        <p class="subtitulo-config">
+          Segundo contacto (opcional). Si se completa, también recibe el aviso.
+        </p>
+        <input
+          type="text"
+          placeholder="Nombre (opcional)"
+          .value=${this.nombreContacto2}
+          @input=${(e: InputEvent) => (this.nombreContacto2 = (e.target as HTMLInputElement).value)}
+        />
+        <input
+          type="tel"
+          placeholder="Teléfono (opcional)"
+          .value=${this.telefonoContacto2}
+          @input=${(e: InputEvent) => (this.telefonoContacto2 = (e.target as HTMLInputElement).value)}
+        />
+
+        <hr class="separador-config" />
         <label class="fila-check">
           <input
             type="checkbox"
@@ -431,20 +488,18 @@ export class PantallaAbrazo extends LitElement {
   }
 
   private _iniciarRespiracion() {
-    // Ciclo 4-2-6, patrón simple de respiración guiada. El círculo crece y
-    // se achica por CSS; con prefers-reduced-motion solo cambia el texto.
-    const fases = [
-      { texto: 'Toma aire por la nariz', dur: 4000, grande: true },
-      { texto: 'Aguanta el aire', dur: 2000, grande: true },
-      { texto: 'Suelta el aire despacio', dur: 6000, grande: false },
-    ];
+    // Ciclo 4-2-6 (inhalar-sostener-exhalar). La secuencia de fases vive en
+    // @abrazo/core (faseEnPaso) para que sea testeable sin DOM; acá solo se
+    // orquesta el timer y se refleja en el círculo por CSS. Con
+    // prefers-reduced-motion el CSS anula la transformación y solo cambia
+    // el texto.
     let i = 0;
     const paso = () => {
-      const f = fases[i % fases.length];
+      const f = faseEnPaso(i);
       this.textoRespiracion = f.texto;
-      this.circuloGrande = f.grande;
+      this.circuloGrande = f.circuloGrande;
       i++;
-      this.timerRespiracion = window.setTimeout(paso, f.dur);
+      this.timerRespiracion = window.setTimeout(paso, f.duracionMs);
     };
     paso();
   }
@@ -467,18 +522,31 @@ export class PantallaAbrazo extends LitElement {
     const nombre = this.nombreContacto.trim();
     const telefono = this.telefonoContacto.trim();
     if (!nombre || !telefono) {
-      this.feedbackMsg = 'Falta completar el nombre y el teléfono.';
+      this.feedbackMsg = 'Falta completar el nombre y el teléfono del primer contacto.';
       return;
     }
+
+    const contactos = [{ nombre, telefono, relacion: 'contacto principal' }];
+
+    const nombre2 = this.nombreContacto2.trim();
+    const telefono2 = this.telefonoContacto2.trim();
+    if (nombre2 || telefono2) {
+      if (!nombre2 || !telefono2) {
+        this.feedbackMsg = 'El segundo contacto necesita nombre Y teléfono, o dejar ambos vacíos.';
+        return;
+      }
+      contactos.push({ nombre: nombre2, telefono: telefono2, relacion: 'contacto secundario' });
+    }
+
     await this.emergencia.configurarProtocolo({
-      contactos: [{ nombre, telefono, relacion: 'contacto principal' }],
+      contactos,
       // Mensaje literal también en el SMS best-effort.
       mensajeSMS: 'Hola {nombre}. Te aviso desde la app Abrazo: necesito que vengas.',
     });
     this.tieneContacto = true;
-    this.nombreGuardado = nombre;
+    this.nombresGuardados = contactos.map((c) => c.nombre);
     this._cambiarVista('principal');
-    this.feedbackMsg = `Guardado. Si el niño toca "Necesito un abrazo", el aviso llega a ${nombre}.`;
+    this.feedbackMsg = `Guardado. Si el niño toca "Necesito un abrazo", el aviso llega a ${this.nombresGuardados.join(' y ')}.`;
   }
 
   private _vibrar(patron: number | number[]) {
@@ -500,18 +568,19 @@ export class PantallaAbrazo extends LitElement {
     await this.updateComplete;
 
     const res = await this.emergencia.activar();
-    const nombre = this.nombreGuardado || 'tu adulto';
+    const nombres = this.nombresGuardados.join(' y ') || 'tu adulto';
 
     // Lenguaje LITERAL: la app solo afirma lo que puede verificar (que el
     // aviso llegó al servidor), nunca que el adulto "ya viene".
     if (res.canal === 'cooldown') {
-      this.feedbackMsg = `El aviso ya fue enviado a ${nombre} hace un momento.`;
+      this.feedbackMsg = `El aviso ya fue enviado a ${nombres} hace un momento.`;
     } else if (res.canal === 'sin-configurar') {
       this.feedbackMsg = 'Falta elegir a quién avisar. Pide a un adulto que toque el botón ⚙️.';
     } else if (res.confirmado) {
-      this.feedbackMsg = `Aviso enviado a ${nombre}.`;
+      this.feedbackMsg = `Aviso enviado a ${nombres}.`;
     } else {
-      this.feedbackMsg = 'No se pudo enviar el aviso. Puedes tocar el botón otra vez, o buscar a un adulto cerca.';
+      this.feedbackMsg =
+        'No se pudo enviar el aviso todavía (se reintentará solo apenas haya conexión). Puedes tocar el botón otra vez, o buscar a un adulto cerca.';
     }
 
     this._vibrar([100, 50, 200]);

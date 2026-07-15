@@ -17,8 +17,8 @@ export class ServicioPostal {
   private network: NetworkService;
   private ready: Promise<void>;
 
-  constructor(private storage: StorageProvider, private endpoint = '/api/postales') {
-    this.network = new NetworkService(storage);
+  constructor(private storage: StorageProvider, private endpoint = '/api/postales', apiKey?: string) {
+    this.network = new NetworkService(storage, apiKey);
     this.ready = this.cargarCola();
   }
 
@@ -34,7 +34,7 @@ export class ServicioPostal {
     if (this.cola.length > MAX_COLA) this.cola.shift();
     await this.guardarCola();
     // NetworkService ya maneja reintentos y cola offline internamente.
-    void this.network.request(this.endpoint, postal);
+    void this.network.request(this.endpoint, postal, { tipo: postal.tipo });
     return postal;
   }
 

@@ -4,5 +4,6 @@ export * from './shared/event-bus.js';
 export * from './shared/device-profiler.js';
 export * from './shared/network.service.js';
 export * from './domain/regulacion/semaforo.service.js';
+export * from './domain/regulacion/respiracion.js';
 export * from './domain/emergencia/emergencia.service.js';
 export * from './domain/comunicacion/postal.service.js';

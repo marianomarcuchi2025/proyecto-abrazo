@@ -194,3 +194,173 @@ código ya existente — y apareció un bug real.
     Verificado con test automatizado y con el mismo script manual que
     expuso el bug originalmente (antes: 3 llamadas concurrentes; después:
     1 sola).
+
+---
+
+# Pasada 5: auditoría del repositorio completo (no solo el código)
+
+A diferencia de las pasadas 1-4, que auditaban lógica de dominio, esta
+pasada auditó el repo entero contra sí mismo: clonado real, `npm ci`,
+`npm run build`, `npm test` ejecutados de verdad (no solo lectura), y
+comparación exhaustiva entre lo que la documentación afirma y lo que el
+código hace. El código en sí (`core`/`server`/`ui-nino`) pasó esta
+auditoría sin bugs nuevos de la gravedad de los puntos 1-16: build limpio,
+11/11 tests verdes, servidor probado manualmente contra el filtro de
+datos biométricos. El problema encontrado esta vez está en la
+documentación, y es grave por lo que este mismo archivo defiende:
+integridad sobre apariencia.
+
+## Crítico: el README real fue borrado y reemplazado por uno ficticio
+
+17. **`README.md` no describía este proyecto.** Reconstruido el historial:
+    el commit `bf7a7d2` dejó un README de 129 líneas alineado con el
+    código real. Un commit posterior (`e052553`) creó un archivo nuevo de
+    819 líneas, `Realmente.md`, con una arquitectura y set de features
+    completamente inventados (React/Next.js, PostgreSQL, Redis, Docker/
+    Kubernetes, backend FastAPI, autenticación 2FA con TOTP/WebAuthn,
+    E2EE, exportación de datos "que cumple HIPAA/GDPR", CI con ArgoCD/
+    Playwright/K6, ORM Prisma/Drizzle con `npm run db:migrate`, versión
+    "empresarial" con SSO/OIDC/SAML, bug bounty, demo en vivo en
+    `proyecto-abrazo.org`, video de YouTube, capturas en
+    `docs/assets/*.png` y un GIF en `docs/assets/demo.gif`). El commit
+    `182ebb4` borró el README honesto, y `772a12a` renombró
+    `Realmente.md` a `README.md`, dejándolo como el README oficial del
+    repo. Ninguna de las imágenes, el video, el dominio de demo, el
+    `docker-compose.yml`, el `Dockerfile`, `docs/clinical-guide.md` ni
+    `CHANGELOG.md` existían en el repo — se verificó archivo por archivo.
+    Además el FAQ de ese README afirmaba licencia MIT ("haz lo que
+    quieras con el código"), cuando la licencia real declarada en
+    `LICENSE` y en los cuatro `package.json` es AGPL-3.0-only (copyleft
+    fuerte) — una diferencia legal, no cosmética. **Corregido:** se
+    restauró como base el README honesto recuperado del historial y se
+    agregó `CHANGELOG.md` (enlazado desde el README pero inexistente
+    hasta ahora).
+
+## Gaps encontrados en la revisión de código de esta pasada (no bugs de honestidad, robustez menor — corregidos en Pasada 6)
+
+18. **Confirmación tardía no propagada**: si `ServicioEmergencia.activar()`
+    se llamaba sin conexión, `NetworkService` encolaba correctamente y
+    devolvía `confirmado: false` (correcto). Pero cuando `flushQueue()`
+    reintentaba con éxito más tarde, no había ningún callback que
+    actualizara `lastConfirmado` en `ServicioEmergencia` ni que avisara a
+    la UI — el niño nunca se enteraba de que el aviso finalmente salió.
+    **Corregido en Pasada 6**, ver más abajo.
+
+19. **Un solo contacto de emergencia recibía el aviso**: `activar()` usaba
+    `this.protocolo.contactos[0]` aunque el modelo de datos
+    (`ProtocoloEmergencia.contactos: ContactoEmergencia[]`) siempre
+    soportó varios. No estaba documentado en ningún lado como limitación
+    intencional. **Corregido en Pasada 6**.
+
+20. **`packages/ui-nino` seguía sin tests** (535 líneas en
+    `pantalla-abrazo.ts` sin cobertura automatizada). **Parcialmente
+    corregido en Pasada 6**: la lógica pura que se pudo extraer sin DOM
+    (respiración guiada) ahora vive en `core` y tiene tests; el componente
+    Lit en sí (render, eventos de click, estado) sigue sin tests de
+    interfaz.
+
+## Qué NO se hizo en esta pasada (y no debe fingirse hecho)
+
+- No se generaron capturas ni GIF de demo reales: el entorno de auditoría
+  no tenía permisos para instalar un navegador headless (Playwright/
+  Chromium falló por falta de `sudo` en el sandbox). Fabricar un mockup y
+  presentarlo como captura real habría repetido exactamente el problema
+  que este documento denuncia. Sigue pendiente: correr `npm run dev` en
+  un entorno con navegador y capturar de verdad.
+- No se verificó si `proyecto-abrazo.org` sirve o no una versión real de
+  la app.
+
+---
+
+# Pasada 6: persistencia, autenticación y cierre de gaps de la Pasada 5
+
+Esta pasada implementó las correcciones concretas que la Pasada 5 había
+dejado identificadas pero sin resolver, más el pendiente #10 de la
+auditoría original (persistencia real). Todo lo de abajo está verificado
+con build limpio, 26 tests automatizados en verde (14 en `core`, 12 en
+`server`, antes 11 en total) y una prueba manual end-to-end real: servidor
+levantado con `API_KEY` configurada, `ServicioEmergencia` real (no un
+mock) mandándole una alerta con dos contactos, verificación de que
+`alertas.json` en disco tiene los dos contactos, y verificación de que un
+API key incorrecto devuelve `confirmado: false` sin tirar excepción.
+
+## Persistencia real (cierra el punto 10, pendiente desde la auditoría original)
+
+21. **`packages/server/src/persistence.ts` — `JsonFileStore`**: reemplaza
+    los arrays en memoria (`postales`, `alertas`) por archivos JSON en
+    disco (`DATA_DIR/postales.json`, `DATA_DIR/alertas.json`), con
+    escritura atómica (escribe a un `.tmp` y renombra) para no corromper
+    el archivo si el proceso se cae a mitad de una escritura. Límite
+    honesto documentado en el propio archivo: no es una base de datos
+    transaccional, reescribe el archivo completo en cada escritura
+    (O(n)), y no soporta escritura concurrente segura desde más de un
+    proceso. Correcto y suficiente para una sola instancia de MVP; para
+    producción con más de una instancia sigue haciendo falta una base de
+    datos real, como ya estaba documentado.
+
+## Autenticación mínima (nuevo, no estaba en el alcance de las pasadas 1-5)
+
+22. **API key compartido opcional** (`server.ts`): si se define `API_KEY`
+    (env var), todos los endpoints `/api/*` exigen
+    `Authorization: Bearer <clave>`, comparada en tiempo constante
+    (`crypto.timingSafeEqual`) para no filtrar el valor por timing
+    attack. Si no se define, el servidor arranca abierto e imprime una
+    advertencia explícita en el log. Límite honesto: es un secreto único
+    por instancia desplegada, no autenticación por usuario ni por
+    dispositivo/familia — sigue sin poder distinguir qué familia mandó
+    qué dato. Verificado con tests HTTP reales (401 sin token, 401 con
+    token incorrecto, 201 con token correcto) y con curl manual contra el
+    servidor corriendo.
+
+## Multi-contacto y confirmación tardía (cierran los gaps #19 y #18 de la Pasada 5)
+
+23. **Todos los contactos configurados reciben el aviso** (`emergencia.
+    service.ts`, `server.ts`): `activar()` ya no usa solo
+    `contactos[0]`; envía un único pedido al backend con el array
+    completo de contactos, y best-effort intenta SMS/WhatsApp para cada
+    uno. El endpoint `/api/alertas-emergencia` cambió de aceptar un
+    `contacto` singular a `contactos: [...]` (rechaza arrays vacíos o con
+    contactos sin `nombre`/`telefono`). La UI de ajustes ahora permite
+    cargar un segundo contacto opcional. Se limitó a dos contactos desde
+    la interfaz (no una lista sin límite) por simplicidad del formulario,
+    no por límite técnico del modelo de datos.
+
+24. **Confirmación tardía de mensajes encolados offline** (`network.
+    service.ts`, `emergencia.service.ts`): `NetworkService` ahora emite
+    un evento (`network.entregado-tarde`) cuando `flushQueue()` entrega
+    con éxito un pedido que se había encolado offline. `ServicioEmergencia`
+    escucha ese evento; si corresponde a una alerta de emergencia propia,
+    actualiza su estado interno y emite `emergencia.confirmado-tarde`,
+    que la pantalla usa para avisar al usuario ("Aviso a {nombres}
+    confirmado, se envió apenas volvió la conexión") en vez de dejarlo
+    sin saber si el mensaje llegó o no.
+
+## Extracción de lógica testeable (cierra parcialmente el gap #20)
+
+25. **`packages/core/src/domain/regulacion/respiracion.ts`**: el ciclo de
+    respiración guiada 4-2-6, que vivía embebido en el componente Lit
+    (`pantalla-abrazo.ts`) sin ningún test posible sin DOM, se extrajo a
+    lógica pura (`FASES_RESPIRACION`, `faseEnPaso`) con 4 tests. El
+    componente Lit sigue sin tests de interfaz — eso requeriría sumar
+    infraestructura de testing con DOM (jsdom o similar), que no se
+    agregó en esta pasada para no sumar dependencias pesadas sin que el
+    usuario lo pidiera explícitamente.
+
+## Qué NO se hizo en esta pasada (y no debe fingirse hecho)
+
+- No se agregó autenticación por usuario/familia ni sistema de cuentas —
+  el API key compartido es un paso intermedio razonable para un
+  self-hosted de un solo operador, no un sistema de identidad.
+- No se migró la persistencia a una base de datos real (Postgres/SQLite);
+  se evaluó deliberadamente no sumar `better-sqlite3` u otra dependencia
+  con compilación nativa para no arriesgar romper el build en entornos
+  sin herramientas de compilación disponibles.
+- No se agregaron tests de interfaz (DOM) para los componentes Lit.
+- No se generó demo real (capturas/GIF/video) ni se verificó despliegue
+  en `proyecto-abrazo.org` — mismo motivo que en Pasada 5.
+- No se hizo push directo al repositorio remoto desde el entorno de
+  auditoría; los cambios se entregaron para revisión y aplicación manual
+  o vía el flujo de git que el usuario decida.
+- Sigue sin validación clínica del flujo de crisis, sin cumplimiento
+  normativo formal para datos de menores, y sin las demás pendientes ya
+  documentadas en pasadas anteriores.
