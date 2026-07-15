@@ -17,6 +17,10 @@ en el espectro autista — a regular sus emociones. Toda ayuda cuenta.
 3. **Código** — ver los pendientes en el README ("Antes de considerar esto
    listo para familias reales").
 
+## Cómo participar sin programar
+
+Ver [`docs/COMUNIDAD.md`](docs/COMUNIDAD.md) — usá [GitHub Discussions](../../discussions) para preguntas y comentarios sueltos, en vez de un issue formal.
+
 ## Flujo de trabajo
 
 1. Hacé fork del repo y creá una rama: `git checkout -b mi-cambio`.

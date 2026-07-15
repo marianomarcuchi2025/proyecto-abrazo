@@ -2,6 +2,14 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 8: canal de comunidad liviano
+
+### Agregado
+- `docs/COMUNIDAD.md`: explica cómo participar sin abrir un issue de GitHub (usar Discussions), enlazado desde `CONTRIBUTING.md`.
+
+### Pendiente (no resuelto en esta pasada)
+- Falta habilitar GitHub Discussions en la configuración del repositorio — requiere un clic del dueño en Settings, no se puede activar por API/git.
+
 ## [Unreleased] — Pasada 7: cobertura de tests visible
 
 ### Agregado

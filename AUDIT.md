@@ -398,3 +398,20 @@ podía saberlo sin correrlo manualmente con flags experimentales.
 - Sigue pendiente todo lo de pasadas anteriores, empezando por la
   revisión clínica del flujo de crisis (ver
   `INVESTIGACION_REPOS_POPULARES_Y_ROADMAP.md`, prioridad 1).
+
+## Pasada 8 — Canal de comunidad liviano (2026-07-14)
+
+27. **`docs/COMUNIDAD.md`**: documenta GitHub Discussions como canal de
+    baja fricción para preguntas/comentarios que no ameritan un issue
+    formal, y explica por qué no se sumó Discord/Matrix todavía (un solo
+    mantenedor, sin capacidad de moderar chat en vivo). Enlazado desde
+    `CONTRIBUTING.md`.
+
+### Qué falta para que esto funcione de verdad
+
+- **GitHub Discussions no está habilitado todavía en el repositorio** —
+  es una casilla en Settings → General → Features que solo puede tocar
+  el dueño del repo (no se puede activar por API con los permisos de un
+  token normal, ni por `git push`). El link `../../discussions` en
+  `docs/COMUNIDAD.md` da 404 hasta que se habilite. Documentado acá para
+  no fingir que ya está activo.
