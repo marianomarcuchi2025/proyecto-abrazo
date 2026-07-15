@@ -674,6 +674,14 @@ export class PantallaAbrazo extends LitElement {
 
   private _confirmarEmergencia() {
     this._vibrar(50);
+    if (!this.tieneContacto) {
+      // No hay ningún adulto configurado todavía: el aviso persistente de
+      // arriba ("Falta elegir a quién avisar...") ya lo explica. Abrir acá
+      // el modal "¿Quieres avisar a tu adulto?" sería engañoso (no hay
+      // ningún adulto al que avisar), y repetir el mismo mensaje una
+      // segunda vez abajo es ruido, no información nueva. PASADA 10.
+      return;
+    }
     this.showEmergencyConfirm = true;
   }
 

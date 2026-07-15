@@ -462,3 +462,20 @@ Aucards/cboard, sin construir un editor de tableros completo.
 - Atribución de licencia (CC BY-NC-SA, autor Sergio Palao, Gobierno de
   Aragón) agregada en la UI y en el README — verificada contra los
   términos de uso públicos de ARASAAC, no asumida.
+
+## Pasada 10 — Aviso duplicado al tocar "Necesito un abrazo" sin contacto (2026-07-14)
+
+Reportado por el usuario tras ver la app corriendo: sin contacto
+configurado, el aviso persistente ("Falta elegir a quién avisar...")
+aparecía arriba, y al tocar "Necesito un abrazo" se abría igual el modal
+de confirmación ("¿Quieres avisar a tu adulto?" — engañoso, no hay ningún
+adulto configurado), y al confirmar aparecía el mismo mensaje de "Falta
+elegir a quién avisar" **otra vez**, abajo, casi textual.
+
+30. **`_confirmarEmergencia()`** ahora no abre el modal de confirmación
+    si no hay contacto configurado — el aviso persistente de arriba ya
+    cubre ese caso, y abrir un modal que pregunta "¿Quieres avisar a tu
+    adulto?" cuando no hay ningún adulto configurado violaba el principio
+    de lenguaje literal del proyecto (afirmar algo que no es cierto
+    todavía). El botón sigue vibrando al tocarlo (feedback táctil), pero
+    ya no duplica el mensaje de texto.

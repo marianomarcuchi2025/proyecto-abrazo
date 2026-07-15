@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 10: aviso duplicado al pedir un abrazo sin contacto
+
+### Corregido
+- Tocar "Necesito un abrazo" sin contacto configurado abría igual el modal "¿Quieres avisar a tu adulto?" (engañoso) y después repetía el mensaje de "Falta elegir a quién avisar" una segunda vez. Ahora el botón no abre el modal en ese caso — el aviso persistente ya visible arriba es suficiente, sin duplicar texto.
+
 ## [Unreleased] — Pasada 9: símbolos ARASAAC para "Quiero decir algo"
 
 ### Agregado
