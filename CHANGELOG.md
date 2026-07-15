@@ -2,6 +2,14 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 11: captura real para el README
+
+### Agregado
+- `docs/capturas/principal.png`: captura real de la pantalla principal, tomada corriendo la app localmente (no un mockup). Enlazada en el README.
+
+### Conocido / no resuelto en esta pasada
+- Faltan capturas de las otras 3 pantallas (ajustes, respiración guiada, "Quiero decir algo"). Se intentó automatizar su captura y se descartó un método (SVG renderizado por DOM) por riesgo de no verse en GitHub (sanitiza `foreignObject`); ver detalle en `AUDIT.md`, Pasada 11.
+
 ## [Unreleased] — Pasada 10: aviso duplicado al pedir un abrazo sin contacto
 
 ### Corregido

@@ -489,3 +489,39 @@ elegir a quién avisar" **otra vez**, abajo, casi textual.
     distinto al del aviso persistente ("Todavía no hay nadie configurado
     para avisar."), que confirma el toque sin repetir la misma oración
     dos veces.
+
+## Pasada 11 — Captura real para el README (2026-07-14/15)
+
+El usuario pidió capturas reales de la app (no mockups) para el README,
+ahora que había acceso a un navegador real corriendo la app localmente.
+
+31. **`docs/capturas/principal.png`** agregada al repo y enlazada en el
+    README — captura real de la pantalla principal, tomada con
+    Recortes/Paint de Windows sobre la app corriendo en
+    `localhost:3000` (no generada ni fabricada). Verificado: el archivo
+    contiene la app real, incluyendo el botón nuevo "💬 Quiero decir
+    algo" de la Pasada 9.
+
+### Qué se intentó y no se pudo (documentado para no repetir el esfuerzo)
+
+- Se intentó automatizar la navegación entre las 4 pantallas (principal,
+  ajustes, respiración, "Quiero decir algo") vía la extensión de
+  automatización del navegador para capturar las 4 de una vez. La
+  pestaña controlada por la extensión resultó consistentemente **no
+  ser la pestaña visualmente activa** de su ventana de Chrome (se pudo
+  cambiar su estado interno vía JavaScript, pero no ponerla al frente
+  para una captura de pantalla del sistema operativo) — problema de la
+  herramienta de automatización en este entorno, no de la app.
+- Como alternativa se probó renderizar cada vista a SVG (clonando el
+  DOM real + estilos + imágenes incrustadas) y descargarlo como
+  archivo — funcionó técnicamente, pero se descartó antes de subirlo:
+  GitHub sanitiza el contenido `<foreignObject>` de los SVG por
+  seguridad (previene XSS), así que ese archivo muy probablemente se
+  hubiera visto en blanco en el README de GitHub. Se verificó
+  localmente con ImageMagick que el `foreignObject` no rasteriza (salió
+  una imagen de 520 bytes, prácticamente vacía) antes de decidir no
+  usarlo.
+- Conclusión: por ahora solo hay una captura real (pantalla principal).
+  Las otras 3 vistas siguen descritas en texto en el README, no con
+  capturas — preferible a subir una imagen rota o a describir una
+  captura que no existe.

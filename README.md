@@ -12,6 +12,10 @@
 
 > **English:** An open-source web app to help children — especially autistic children — regulate their emotions: a "body traffic light" for emotional check-ins, an emergency button that alerts one or two trusted adults, and guided breathing. Built following published autism-friendly design guidelines (GOV.UK autism design poster, W3C COGA). **Status: MVP / prototype — not clinically validated yet.** Contributions from clinicians, accessibility experts and developers are very welcome.
 
+<p align="center"><img src="docs/capturas/principal.png" alt="Captura real de la pantalla principal de Proyecto Abrazo, corriendo localmente" width="360"></p>
+
+<p align="center"><em>Captura real de la pantalla principal, tomada el 2026-07-14 corriendo <code>npm run dev</code> localmente (no es un mockup). Por ahora es la única captura disponible — ver la nota en "Antes de considerar esto listo para familias reales" más abajo.</em></p>
+
 ---
 
 ## ⚠️ Estado del proyecto
@@ -113,7 +117,7 @@ Esto es lo que un lanzamiento real necesitaría y que este MVP todavía no cubre
 - **Cumplimiento normativo** para datos de menores (COPPA, GDPR-K o equivalente local) y una política de privacidad real.
 - **Base de datos transaccional real** — hoy es persistencia en archivos JSON (sobrevive reinicios, pero sin transacciones ni concurrencia segura entre procesos).
 - **Tests de interfaz (DOM) para `ui-nino`** — la lógica pura (respiración, dominio) tiene 26 tests entre `core` y `server`; los componentes Lit en sí (render, eventos de click) todavía no tienen tests automatizados.
-- **Demo pública real** (capturas, video, deploy verificable) — todavía no existe; correr `npm run dev` localmente es, por ahora, la única forma de verla.
+- **Demo pública real** (deploy verificable, video) — todavía no existe; hay una captura real de la pantalla principal arriba (`docs/capturas/principal.png`, tomada el 2026-07-14 corriendo la app localmente), pero faltan capturas de las otras 3 pantallas (ajustes, respiración guiada, "Quiero decir algo") y un deploy público. Correr `npm run dev` localmente sigue siendo la única forma de ver la app completa.
 - Pruebas con usuarios reales (niños, cuidadores) antes de cualquier intento de distribución masiva.
 
 ## 📄 Licencia
