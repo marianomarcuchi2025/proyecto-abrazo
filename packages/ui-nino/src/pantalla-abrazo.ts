@@ -8,6 +8,9 @@ import {
   ServicioEmergencia,
   EventBus,
   faseEnPaso,
+  SIMBOLOS_NECESIDADES,
+  urlImagenArasaac,
+  buscarSimbolo,
   type EmergenciaConfirmadaTarde,
 } from '@abrazo/core';
 
@@ -26,7 +29,11 @@ import {
  *    solo afirma lo que sabe: "Aviso enviado a {nombre}".
  * 2. Sin botones muertos. Todo botón visible hace algo predecible
  *    (GOV.UK: no forzar interacciones de resultado impredecible). El botón
- *    "Quiero decir algo" del diseño original se eliminó hasta que exista.
+ *    "Quiero decir algo" del diseño original se había eliminado hasta que
+ *    existiera una función real; desde PASADA 9 muestra un set fijo de 6
+ *    símbolos ARASAAC (no un editor de tableros completo) para que el
+ *    niño señale o le muestre a un adulto qué necesita. PROTOTIPO SIN
+ *    REVISIÓN CLÍNICA todavía — ver docs/REVISION_CLINICA_PENDIENTE.md.
  * 3. Vibración desactivada por defecto y configurable. Estímulos
  *    sensoriales inesperados pueden ser aversivos; se convierte en opt-in.
  * 4. Colores de baja saturación + etiqueta de texto visible en cada
@@ -50,7 +57,7 @@ import {
  *    llegó o no.
  */
 
-type Vista = 'principal' | 'ajustes' | 'calma';
+type Vista = 'principal' | 'ajustes' | 'calma' | 'necesidad';
 
 @customElement('pantalla-abrazo')
 export class PantallaAbrazo extends LitElement {
@@ -270,6 +277,56 @@ export class PantallaAbrazo extends LitElement {
       min-height: 32px;
       text-align: center;
     }
+    .grilla-simbolos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .boton-simbolo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid #d8d5cd;
+      background: #f2f0ea;
+      cursor: pointer;
+      min-height: 96px;
+    }
+    .imagen-simbolo {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+    }
+    .texto-simbolo {
+      font-size: 0.85rem;
+      text-align: center;
+      color: var(--texto);
+    }
+    .atribucion-arasaac {
+      font-size: 0.7rem;
+      color: var(--texto-suave);
+      text-align: center;
+      margin: 4px 0 0;
+    }
+    .pantalla-necesidad-detalle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+    }
+    .imagen-simbolo-grande {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+    }
+    .texto-simbolo-grande {
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-align: center;
+    }
   `;
 
   @state() private vista: Vista = 'principal';
@@ -284,6 +341,7 @@ export class PantallaAbrazo extends LitElement {
   @state() private vibracionActivada = false;
   @state() private textoRespiracion = '';
   @state() private circuloGrande = false;
+  @state() private simboloSeleccionadoId: string | null = null;
 
   private semaforo: SemaforoDelCuerpo;
   private emergencia: ServicioEmergencia;
@@ -351,6 +409,7 @@ export class PantallaAbrazo extends LitElement {
         ${this.vista === 'principal' ? this._renderPrincipal() : ''}
         ${this.vista === 'ajustes' ? this._renderAjustes() : ''}
         ${this.vista === 'calma' ? this._renderCalma() : ''}
+        ${this.vista === 'necesidad' ? this._renderNecesidad() : ''}
 
         <div class="feedback" role="status" aria-live="polite">${this.feedbackMsg}</div>
 
@@ -377,6 +436,10 @@ export class PantallaAbrazo extends LitElement {
 
       <button class="boton-principal" @click=${() => this._cambiarVista('calma')}>
         <span class="icono">🌬️</span> Ayúdame a calmarme
+      </button>
+
+      <button class="boton-principal" @click=${() => this._cambiarVista('necesidad')}>
+        <span class="icono">💬</span> Quiero decir algo
       </button>
 
       <div class="semaforo" role="group" aria-label="¿Cómo te sientes?">
@@ -480,9 +543,65 @@ export class PantallaAbrazo extends LitElement {
     `;
   }
 
+  private _renderNecesidad() {
+    // Set fijo de 6 símbolos (no un editor de tableros completo). El niño
+    // toca uno y se muestra grande para señalarlo/mostrarlo a un adulto —
+    // esta pantalla no manda ningún aviso de red propio, a diferencia del
+    // botón de emergencia. Ver packages/core/src/domain/comunicacion/necesidades.ts.
+    const seleccionado = this.simboloSeleccionadoId ? buscarSimbolo(this.simboloSeleccionadoId) : undefined;
+
+    if (seleccionado) {
+      return html`
+        <div class="pantalla-necesidad-detalle">
+          <img
+            class="imagen-simbolo-grande"
+            src=${urlImagenArasaac(seleccionado.arasaacId)}
+            alt=${seleccionado.texto}
+          />
+          <div class="texto-simbolo-grande">${seleccionado.texto}</div>
+          <button
+            class="cancel-btn"
+            style="width: 100%;"
+            @click=${() => (this.simboloSeleccionadoId = null)}
+          >
+            Volver a los símbolos
+          </button>
+        </div>
+      `;
+    }
+
+    return html`
+      <div class="grilla-simbolos" role="group" aria-label="¿Qué necesitás decir?">
+        ${SIMBOLOS_NECESIDADES.map(
+          (simbolo) => html`
+            <button
+              class="boton-simbolo"
+              @click=${() => (this.simboloSeleccionadoId = simbolo.id)}
+            >
+              <img
+                class="imagen-simbolo"
+                src=${urlImagenArasaac(simbolo.arasaacId)}
+                alt=${simbolo.texto}
+              />
+              <span class="texto-simbolo">${simbolo.texto}</span>
+            </button>
+          `
+        )}
+      </div>
+      <p class="atribucion-arasaac">
+        Símbolos: ARASAAC (arasaac.org), autor Sergio Palao, © Gobierno de Aragón — CC BY-NC-SA.
+        Necesitan conexión a internet para cargar.
+      </p>
+      <button class="cancel-btn" style="width: 100%;" @click=${() => this._cambiarVista('principal')}>
+        Volver
+      </button>
+    `;
+  }
+
   private _cambiarVista(vista: Vista) {
     this._detenerRespiracion();
     this.feedbackMsg = '';
+    this.simboloSeleccionadoId = null;
     this.vista = vista;
     if (vista === 'calma') this._iniciarRespiracion();
   }

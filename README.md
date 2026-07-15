@@ -26,6 +26,7 @@ Este README describe únicamente lo que el código de este repositorio hace hoy,
 - 🆘 **Botón de emergencia** — avisa a uno o dos adultos de confianza configurados previamente (todos los contactos configurados reciben el aviso, no solo el primero). La app solo confirma el envío cuando el servidor lo confirma de verdad por HTTP; el intento de SMS/WhatsApp desde el dispositivo es un canal adicional de mejor esfuerzo, nunca la fuente de verdad. Sin falsos "ya viene un abrazo".
 - 📴 **Cola offline con confirmación tardía** — si el dispositivo no tiene conexión al activar la emergencia, el pedido se guarda cifrado localmente y se reintenta solo al recuperar conexión; cuando finalmente se entrega, la pantalla avisa que el mensaje salió (antes esto se perdía silenciosamente).
 - 🌬️ **Respiración guiada** — ciclo simple (4-2-6) para "Ayúdame a calmarme", con soporte de `prefers-reduced-motion` para sensibilidad al movimiento.
+- 💬 **"Quiero decir algo"** — set fijo de 6 símbolos [ARASAAC](https://arasaac.org) ("Tengo hambre", "Tengo sed", "Me duele", "Estoy cansado/a", "Necesito ir al baño", "Necesito estar solo/a"). El niño toca uno y se muestra grande para señalarlo o mostrárselo a un adulto — no es un editor de tableros completo, y no dispara ningún aviso de red propio. **Prototipo sin revisión clínica todavía** (ver `docs/REVISION_CLINICA_PENDIENTE.md`); requiere conexión a internet para cargar las imágenes (se cargan desde la CDN pública de ARASAAC, no están bundleadas en la app).
 - ♿ **Diseño autism-friendly** — lenguaje literal, vibración opt-in, colores de baja saturación, botones con texto (no solo color/emoji), mensajes de estado que no desaparecen solos. Basado en guía publicada (GOV.UK, W3C COGA) — hipótesis de diseño razonables, no validación clínica.
 
 ## 📥 Descargar y probar
@@ -106,7 +107,7 @@ Ver [`CONTRIBUTING.md`](CONTRIBUTING.md). Issues y PRs bienvenidos, en español 
 
 Esto es lo que un lanzamiento real necesitaría y que este MVP todavía no cubre:
 
-- **Revisión clínica/de seguridad infantil** del flujo de emergencia y del lenguaje usado con niños en crisis, por parte de alguien con esa especialidad — no un LLM ni un desarrollador solo.
+- **Revisión clínica/de seguridad infantil** del flujo de emergencia, del lenguaje usado con niños en crisis, y ahora también de los 6 símbolos de "Quiero decir algo" (¿son las necesidades correctas? ¿el set de 6 alcanza?) — por parte de alguien con esa especialidad, no un LLM ni un desarrollador solo. Pedido puntual en `docs/REVISION_CLINICA_PENDIENTE.md`.
 - **Notificación server-side real** (SMS/push con confirmación de entrega) en vez de depender del navegador del dispositivo del niño.
 - **Cuentas/identidad por familia o dispositivo** — hoy la autenticación es un único API key por instancia, no distingue quién manda qué.
 - **Cumplimiento normativo** para datos de menores (COPPA, GDPR-K o equivalente local) y una política de privacidad real.

@@ -52,4 +52,16 @@ Y cuando la conexión vuelve y el aviso finalmente sale, sin que el niño tenga 
 4. ¿Falta algún caso — por ejemplo, qué pasa si el niño toca el botón repetidamente en pánico (la app tiene un cooldown para evitar duplicados, pero el niño no ve ningún mensaje distinto en ese caso)?
 5. ¿Hay algo en este flujo que un profesional consideraría directamente inapropiado o riesgoso para publicar, más allá de sugerencias de mejora?
 
+## Actualización (Pasada 9): "Quiero decir algo" ya tiene una función real
+
+El botón "Quiero decir algo", que antes no hacía nada (por eso se había quitado), ahora muestra 6 símbolos fijos de [ARASAAC](https://arasaac.org) para que el niño señale o le muestre a un adulto qué necesita:
+
+> Tengo hambre / Tengo sed / Me duele / Estoy cansado/a / Necesito ir al baño / Necesito estar solo/a
+
+No dispara ningún aviso, solo se muestra grande en pantalla. **Preguntas adicionales para quien revise:**
+
+6. ¿Estas 6 necesidades son las más importantes para cubrir con un set tan chico, o falta/sobra alguna?
+7. ¿"Necesito estar solo/a" puede malinterpretarse en un contexto de crisis (por ejemplo, un adulto podría leerlo como "dejalo solo" en un momento donde no corresponde)?
+8. ¿El texto en primera persona ("Tengo hambre") es más apropiado que una instrucción ("Dame de comer"), o depende del niño?
+
 No hace falta revisar código ni instalar nada — alcanza con responder estas preguntas por escrito (email, o un comentario en el issue de GitHub si se prefiere: <https://github.com/marianomarcuchi2025/proyecto-abrazo/issues>).

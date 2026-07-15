@@ -2,6 +2,18 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 9: símbolos ARASAAC para "Quiero decir algo"
+
+### Agregado
+- `packages/core/src/domain/comunicacion/necesidades.ts`: set fijo de 6 símbolos ARASAAC (hambre, sed, dolor, cansancio, baño, estar solo/a), con IDs reales verificados en la API pública de ARASAAC. 3 tests nuevos (17 en `core` en total).
+- Nueva vista en `pantalla-abrazo.ts`: el botón "Quiero decir algo" (antes muerto, sin función) ahora muestra una grilla de estos 6 símbolos; al tocar uno se agranda para señalarlo/mostrarlo a un adulto. No dispara ningún aviso de red — solo carga la imagen del pictograma desde la CDN de ARASAAC.
+- Preguntas 6-8 agregadas a `docs/REVISION_CLINICA_PENDIENTE.md` sobre este set de símbolos.
+
+### Conocido / no resuelto en esta pasada
+- No se pudo verificar visualmente que las imágenes cargan bien (restricción de red del entorno de desarrollo, no del código). Pendiente de confirmación corriendo `npm run dev` con internet real.
+- Depende de conexión a un tercero (ARASAAC) — trade-off de privacidad nuevo, no resuelto (alternativa futura: empaquetar las imágenes localmente).
+- Los 6 símbolos son una propuesta razonable, sin revisión clínica todavía.
+
 ## [Unreleased] — Pasada 8: canal de comunidad liviano
 
 ### Agregado

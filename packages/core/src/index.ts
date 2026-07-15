@@ -7,3 +7,4 @@ export * from './domain/regulacion/semaforo.service.js';
 export * from './domain/regulacion/respiracion.js';
 export * from './domain/emergencia/emergencia.service.js';
 export * from './domain/comunicacion/postal.service.js';
+export * from './domain/comunicacion/necesidades.js';

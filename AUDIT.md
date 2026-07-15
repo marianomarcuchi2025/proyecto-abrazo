@@ -415,3 +415,51 @@ podía saberlo sin correrlo manualmente con flags experimentales.
   token normal, ni por `git push`). El link `../../discussions` en
   `docs/COMUNIDAD.md` da 404 hasta que se habilite. Documentado acá para
   no fingir que ya está activo.
+
+## Pasada 9 — Símbolos ARASAAC para "Quiero decir algo" (2026-07-14)
+
+Contexto: el botón "Quiero decir algo" del diseño original se había
+quitado en una pasada anterior porque no tenía función (gap documentado
+desde el principio). El roadmap de la investigación comparativa
+(`INVESTIGACION_REPOS_POPULARES_Y_ROADMAP.md`, prioridad 2) proponía
+resolverlo con un set fijo de símbolos ARASAAC, inspirado en
+Aucards/cboard, sin construir un editor de tableros completo.
+
+28. **`packages/core/src/domain/comunicacion/necesidades.ts`**: set fijo
+    de 6 `SimboloNecesidad` (hambre, sed, dolor, cansancio, baño,
+    necesidad de estar solo/a), con los IDs reales de pictogramas de
+    ARASAAC (buscados manualmente en la API pública `bestsearch` el
+    2026-07-14, no inventados). 3 tests nuevos.
+29. **`packages/ui-nino/src/pantalla-abrazo.ts`**: nueva vista
+    `necesidad` — grilla de 6 botones con imagen + texto; al tocar uno,
+    se muestra grande en pantalla con un botón "Volver a los símbolos".
+    No dispara ningún aviso de red propio (a diferencia del botón de
+    emergencia) — la única llamada de red es cargar la imagen del
+    pictograma.
+
+### Limitaciones honestas de esta pasada
+
+- **No pude verificar visualmente que las imágenes cargan bien.** Este
+  entorno de auditoría no tiene acceso de red a `api.arasaac.org` para
+  binarios (mismo tipo de restricción de sandbox que bloqueó Playwright
+  en pasadas anteriores) — solo pude confirmar por la API JSON de
+  ARASAAC que los IDs de pictograma son reales y corresponden a las
+  palabras buscadas. La app en un navegador real con internet sí debería
+  cargarlas (es el patrón de URL público documentado de ARASAAC), pero
+  esto queda pendiente de que alguien lo confirme visualmente corriendo
+  `npm run dev`.
+- **Depende de conexión a internet real y de un tercero (ARASAAC)**, a
+  diferencia del resto de la app que es self-hosted. Cada vez que el
+  niño toca un símbolo, el navegador hace una petición a
+  `api.arasaac.org` — eso significa que ARASAAC ve esa IP. Es un
+  trade-off de privacidad que no existía antes en la app y que no se
+  resolvió acá (la alternativa sería empaquetar las imágenes localmente,
+  algo que este entorno tampoco pudo hacer por la misma restricción de
+  red).
+- **Los 6 símbolos elegidos son una propuesta razonable, no una
+  validada.** Igual que el resto del flujo de crisis, necesita revisión
+  clínica — se agregaron 3 preguntas puntuales sobre esto en
+  `docs/REVISION_CLINICA_PENDIENTE.md`.
+- Atribución de licencia (CC BY-NC-SA, autor Sergio Palao, Gobierno de
+  Aragón) agregada en la UI y en el README — verificada contra los
+  términos de uso públicos de ARASAAC, no asumida.
