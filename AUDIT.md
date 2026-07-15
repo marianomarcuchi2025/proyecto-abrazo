@@ -477,5 +477,15 @@ elegir a quién avisar" **otra vez**, abajo, casi textual.
     cubre ese caso, y abrir un modal que pregunta "¿Quieres avisar a tu
     adulto?" cuando no hay ningún adulto configurado violaba el principio
     de lenguaje literal del proyecto (afirmar algo que no es cierto
-    todavía). El botón sigue vibrando al tocarlo (feedback táctil), pero
-    ya no duplica el mensaje de texto.
+    todavía).
+
+    **Corrección sobre la marcha:** el primer intento de este fix dejaba
+    el botón sin ninguna respuesta visible al tocarlo en esta situación
+    (solo vibraba, y la vibración no se nota en una computadora) —
+    reintroducía el problema de "botón muerto" que el proyecto evita a
+    propósito. Detectado por el usuario probando la app real en su
+    navegador, no en tests automatizados (gap conocido: sin tests de
+    interfaz para `ui-nino`). Corregido para mostrar un mensaje visible
+    distinto al del aviso persistente ("Todavía no hay nadie configurado
+    para avisar."), que confirma el toque sin repetir la misma oración
+    dos veces.

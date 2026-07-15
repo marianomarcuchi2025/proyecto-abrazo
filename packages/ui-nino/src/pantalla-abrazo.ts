@@ -675,11 +675,17 @@ export class PantallaAbrazo extends LitElement {
   private _confirmarEmergencia() {
     this._vibrar(50);
     if (!this.tieneContacto) {
-      // No hay ningún adulto configurado todavía: el aviso persistente de
-      // arriba ("Falta elegir a quién avisar...") ya lo explica. Abrir acá
-      // el modal "¿Quieres avisar a tu adulto?" sería engañoso (no hay
-      // ningún adulto al que avisar), y repetir el mismo mensaje una
-      // segunda vez abajo es ruido, no información nueva. PASADA 10.
+      // No hay ningún adulto configurado todavía: abrir el modal
+      // "¿Quieres avisar a tu adulto?" sería engañoso (no hay ningún
+      // adulto al que avisar). Pero el botón sigue necesitando una
+      // respuesta VISIBLE al tocarlo (principio de diseño #2: sin
+      // botones muertos) — la vibración sola no alcanza, no se nota en
+      // una computadora. Se usa un texto distinto al aviso persistente
+      // de arriba, para que confirme el toque sin repetir la misma
+      // oración dos veces. PASADA 10, corregido tras feedback del
+      // usuario probando la app: el fix original dejaba el botón sin
+      // ninguna respuesta visible en desktop.
+      this.feedbackMsg = 'Todavía no hay nadie configurado para avisar.';
       return;
     }
     this.showEmergencyConfirm = true;
