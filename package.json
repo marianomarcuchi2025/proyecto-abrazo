@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "lerna run dev --stream --parallel",
     "build": "lerna run build --stream",
-    "test": "lerna run test --stream"
+    "test": "lerna run test --stream",
+    "test:coverage": "lerna run test:coverage --stream"
   },
   "devDependencies": {
     "typescript": "^5.4.0",
