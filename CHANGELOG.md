@@ -2,6 +2,20 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 12: demo online y distribución verificada
+
+### Agregado
+- Demo estática en GitHub Pages (rama `gh-pages`, build de `ui-nino` con base `/proyecto-abrazo/`): <https://marianomarcuchi2025.github.io/proyecto-abrazo/>. Corre sin servidor: el botón de emergencia muestra el mensaje honesto de "no se pudo enviar todavía" — sirve para evaluar flujo y lenguaje, no para uso real.
+- `docs/CLINICAL_REVIEW_PENDING.md`: versión en inglés del documento de revisión clínica (el español sigue siendo fuente de verdad).
+- `.github/ISSUE_TEMPLATE/config.yml`: link a los docs de revisión clínica en el selector de issues.
+- Issue #3 etiquetada "good first issue" (auditoría de accesibilidad con axe-core/Lighthouse). La #4 duplicada se cerró.
+- PR abierto a la lista curada [awesome-autism-tech](https://github.com/hbcondo/awesome-autism-tech/pull/4) (verificado abierto el 2026-07-20).
+
+### Conocido / no resuelto en esta pasada
+- El deploy de la demo es manual (build local pusheado a `gh-pages`); el workflow de Actions quedó fuera porque el token de push no tiene scope `workflow`. Automatizarlo queda pendiente.
+- PR a up-for-grabs.net pendiente (requiere completar el flujo de fork+PR desde la sesión del mantenedor).
+- Verificar que la creación de issues no esté restringida para cuentas externas (un visitante deslogueado ve "Issue creation is restricted").
+
 ## [Unreleased] — Pasada 11: captura real para el README
 
 ### Agregado
