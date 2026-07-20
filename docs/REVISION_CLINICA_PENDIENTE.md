@@ -75,7 +75,7 @@ Registro de a quién se le pidió revisión y en qué quedó, para no perder el 
 | Organización | Estado (2026-07-15) | Detalle |
 | :--- | :--- | :--- |
 | APAdeA (Asociación Argentina de Padres de Autistas) | Contactada — en espera | Respondieron por Instagram: "Pasamos tu mensaje al sector correspondiente. Te notificamos en caso de tener novedades." Es un acuse de recibo, no una revisión todavía. |
-| PANAACEA | Contactada — sin respuesta todavía | Sin novedades al 2026-07-15. |
+| PANAACEA | Respondieron — reenviado a contacto directo | Pidieron reenviar el pedido a mmendez@panaacea.org (contacto directo dentro de la organización). Reenviado el 2026-07-20. En espera de la revisión propiamente dicha. |
 | Sociedad Argentina de Pediatría (SAP) — Comité de Crecimiento y Desarrollo | Candidata — no contactada aún | Sin canal de email directo verificado (los de los miembros del comité están ofuscados en su web). Contacto disponible: formulario en sap.org.ar/contacto o WhatsApp wa.link/yd90sg. |
 | FEPRA (Federación de Psicólogas y Psicólogos de la República Argentina) | Mail preparado — no enviado aún | Borrador listo en Gmail a info@fepra.org.ar, pidiendo derivación a un profesional con experiencia en infancia/TEA. |
 | Colegio de Psicólogos Distrito XI (La Plata) | Mail preparado — no enviado aún | Borrador listo en Gmail a distritoxi@colegiodepsicologos.org.ar. |
