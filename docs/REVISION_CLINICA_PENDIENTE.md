@@ -77,5 +77,13 @@ Registro de a quién se le pidió revisión y en qué quedó, para no perder el 
 | Sociedad Argentina de Pediatría (SAP) — Comité de Crecimiento y Desarrollo | Candidata — no contactada aún | Sin canal de email directo verificado (los de los miembros del comité están ofuscados en su web). Contacto disponible: formulario en sap.org.ar/contacto o WhatsApp wa.link/yd90sg. |
 | FEPRA (Federación de Psicólogas y Psicólogos de la República Argentina) | Mail preparado — no enviado aún | Borrador listo en Gmail a info@fepra.org.ar, pidiendo derivación a un profesional con experiencia en infancia/TEA. |
 | Colegio de Psicólogos Distrito XI (La Plata) | Mail preparado — no enviado aún | Borrador listo en Gmail a distritoxi@colegiodepsicologos.org.ar. |
+| World Autism Organisation (WAO) | Mail preparado — no enviado aún | Direcciones info.wao22@gmail.com e info@worldautismorganisation.com confirmadas en su sitio oficial. |
+| Autismo España (Confederación) | Mail preparado — no enviado aún | Direcciones info@autismo.org.es y confederacion@autismo.org.es confirmadas en su sitio oficial. |
+| Fundación Miradas | Mail preparado — no enviado aún | Dirección fmiradas@fundacionmiradas.org confirmada en su sitio oficial. |
+| Plena Inclusión España | Mail preparado — no enviado aún | Dirección info@plenainclusion.org confirmada en su sitio oficial. |
+| Autism-Europe | Mail preparado — no enviado aún | Dirección real es secretariat@autismeurope.org (una lista externa traía dos direcciones distintas que no coincidían con la publicada). |
+| Autism Science Foundation | Mail preparado — no enviado aún | Dirección real es contactus@autismsciencefoundation.org (una lista externa traía info@, que no coincide con la publicada). |
+
+Nota sobre fuentes: en julio de 2026 se recibió una lista externa de ~180 contactos "confirmados" para atraer médicos y asociaciones a nivel global. Al verificarla, el 88% de las filas no tenía email real (placeholder "Ver web") y, de las que sí lo tenían, varias direcciones no coincidían con lo publicado en el sitio oficial de la organización (ej. Autism Science Foundation, Special Olympics). Se usaron solo las direcciones confirmadas de forma independiente contra el sitio oficial de cada organización; el resto de esa lista se descartó por no ser verificable.
 
 Cuando alguna organización responda con observaciones concretas sobre el flujo (no solo un acuse de recibo), esas observaciones se van a documentar acá mismo, con la fecha y — si la persona lo autoriza — su nombre y especialidad.
