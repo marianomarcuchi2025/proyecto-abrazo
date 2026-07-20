@@ -84,6 +84,10 @@ Registro de a quién se le pidió revisión y en qué quedó, para no perder el 
 | Autism-Europe | Mail preparado — no enviado aún | Dirección real es secretariat@autismeurope.org (una lista externa traía dos direcciones distintas que no coincidían con la publicada). |
 | Autism Science Foundation | Mail preparado — no enviado aún | Dirección real es contactus@autismsciencefoundation.org (una lista externa traía info@, que no coincide con la publicada). |
 
+### Contactos por Instagram (2026-07-20)
+
+Además de los mails, se mandaron mensajes directos por Instagram a las cuentas oficiales de: Sociedad Argentina de Pediatría (@soc.arg.ped), FEPRA (@fepra_arg), Colegio de Psicólogos Distrito XI (@colegiodepsicologosdxi), Autismo España (@autismo_espana), Fundación Miradas (@fundacionmiradas), Plena Inclusión (@plenainclusion), Autism-Europe (@autismeurope) y Autism Science Foundation (@autismsciencefd). Enviados por Mariano manualmente (sin acceso de Claude a Instagram). Sin respuesta todavía al momento de este registro.
+
 Nota sobre fuentes: en julio de 2026 se recibió una lista externa de ~180 contactos "confirmados" para atraer médicos y asociaciones a nivel global. Al verificarla, el 88% de las filas no tenía email real (placeholder "Ver web") y, de las que sí lo tenían, varias direcciones no coincidían con lo publicado en el sitio oficial de la organización (ej. Autism Science Foundation, Special Olympics). Se usaron solo las direcciones confirmadas de forma independiente contra el sitio oficial de cada organización; el resto de esa lista se descartó por no ser verificable.
 
 Cuando alguna organización responda con observaciones concretas sobre el flujo (no solo un acuse de recibo), esas observaciones se van a documentar acá mismo, con la fecha y — si la persona lo autoriza — su nombre y especialidad.
