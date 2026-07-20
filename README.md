@@ -10,7 +10,7 @@
 
 **App web de apoyo emocional para niños** — pensada especialmente para niños en el espectro autista. Incluye un "semáforo del cuerpo" para registrar cómo se sienten, un botón de emergencia que avisa a uno o dos adultos de confianza, y respiración guiada. Diseñada siguiendo guías publicadas de diseño accesible para autismo (GOV.UK, W3C COGA).
 
-> **English:** An open-source web app to help children — especially autistic children — regulate their emotions: a "body traffic light" for emotional check-ins, an emergency button that alerts one or two trusted adults, and guided breathing. Built following published autism-friendly design guidelines (GOV.UK autism design poster, W3C COGA). **Status: MVP / prototype — not clinically validated yet.** Contributions from clinicians, accessibility experts and developers are very welcome.
+> **English:** An open-source web app to help children — especially autistic children — regulate their emotions: a "body traffic light" for emotional check-ins, an emergency button that alerts one or two trusted adults, and guided breathing. Built following published autism-friendly design guidelines (GOV.UK autism design poster, W3C COGA). **Status: MVP / prototype — not clinically validated yet.** Contributions from clinicians, accessibility experts and developers are very welcome — clinicians can start with the [English clinical review document](docs/CLINICAL_REVIEW_PENDING.md) (15-20 min, no code).
 
 <p align="center"><img src="docs/capturas/principal.png" alt="Captura real de la pantalla principal de Proyecto Abrazo, corriendo localmente" width="360"></p>
 
@@ -34,6 +34,13 @@ Este README describe únicamente lo que el código de este repositorio hace hoy,
 - ♿ **Diseño autism-friendly** — lenguaje literal, vibración opt-in, colores de baja saturación, botones con texto (no solo color/emoji), mensajes de estado que no desaparecen solos. Basado en guía publicada (GOV.UK, W3C COGA) — hipótesis de diseño razonables, no validación clínica.
 
 ## 📥 Descargar y probar
+
+**Opción 0 — Demo online (sin instalar nada):**
+
+👉 <https://marianomarcuchi2025.github.io/proyecto-abrazo/>
+
+⚠️ La demo corre **sin servidor**: el botón de emergencia NO envía avisos reales — al tocarlo vas a ver el mensaje honesto de "no se pudo enviar el aviso todavía" y el pedido queda en cola local (que es exactamente lo que la app hace offline). Sirve para ver el flujo, el lenguaje y el diseño, no para uso real.
+
 
 **Opción 1 — Descarga directa (sin conocimientos de git):**
 

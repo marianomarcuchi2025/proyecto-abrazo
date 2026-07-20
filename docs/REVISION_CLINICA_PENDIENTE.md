@@ -1,5 +1,7 @@
 # Pedido de revisión clínica — flujo de emergencia de Proyecto Abrazo
 
+> **English version:** [`CLINICAL_REVIEW_PENDING.md`](CLINICAL_REVIEW_PENDING.md) — for the international organizations contacted in English (WAO, Autism-Europe, Autism Science Foundation).
+
 Este documento existe para que un profesional (terapista ocupacional, psicólogo/a infantil, especialista en autismo) pueda revisar en 15-20 minutos, **sin tener que leer código**, el texto exacto que un niño en crisis ve y toca en la app. Es el pedido puntual al que se refiere `CONTRIBUTING.md` cuando pide "profesionales clínicos para revisar el flujo de emergencia y el lenguaje usado con niños en crisis".
 
 Repositorio: <https://github.com/marianomarcuchi2025/proyecto-abrazo> (AGPL-3.0, código abierto). Estado: MVP, **no validado clínicamente todavía** — por eso este pedido.
