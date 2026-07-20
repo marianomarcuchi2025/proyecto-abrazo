@@ -65,3 +65,14 @@ No dispara ningún aviso, solo se muestra grande en pantalla. **Preguntas adicio
 8. ¿El texto en primera persona ("Tengo hambre") es más apropiado que una instrucción ("Dame de comer"), o depende del niño?
 
 No hace falta revisar código ni instalar nada — alcanza con responder estas preguntas por escrito (email, o un comentario en el issue de GitHub si se prefiere: <https://github.com/marianomarcuchi2025/proyecto-abrazo/issues>).
+
+## Seguimiento de organizaciones contactadas
+
+Registro de a quién se le pidió revisión y en qué quedó, para no perder el hilo. Se actualiza a medida que hay novedades — sin inventar estados que no se confirmaron.
+
+| Organización | Estado (2026-07-15) | Detalle |
+| :--- | :--- | :--- |
+| APAdeA (Asociación Argentina de Padres de Autistas) | Contactada — en espera | Respondieron por Instagram: "Pasamos tu mensaje al sector correspondiente. Te notificamos en caso de tener novedades." Es un acuse de recibo, no una revisión todavía. |
+| PANAACEA | Contactada — sin respuesta todavía | Sin novedades al 2026-07-15. |
+
+Cuando alguna organización responda con observaciones concretas sobre el flujo (no solo un acuse de recibo), esas observaciones se van a documentar acá mismo, con la fecha y — si la persona lo autoriza — su nombre y especialidad.
