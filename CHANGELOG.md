@@ -33,16 +33,13 @@ codigo:
   GitHub). Un colaborador sin permiso de escritura no puede crear una
   etiqueta nueva, asi que la instruccion original lo dejaba bloqueado.
   Se suavizo el texto para que no dependa de que la etiqueta ya exista.
-
-### Conocido / no resuelto en esta pasada
-- `.github/ISSUE_TEMPLATE/revision_clinica.md` sigue declarando
-  `labels: clinical-review` en su frontmatter. Como esa etiqueta no
-  existe, GitHub simplemente no aplica ninguna al crear el issue (no
-  rompe nada, pero tampoco etiqueta automaticamente como se pretendia).
-  La unica forma real de cerrar esto es crear las dos etiquetas
-  (`clinical-review`, `safety-critical`) desde Settings → Labels — no se
-  pudo hacer por API/git en esta sesion (mismo bloqueo de permisos de
-  escritura ya documentado en pasadas anteriores).
+- Labels `clinical-review` y `safety-critical` creadas por el mantenedor
+  en Settings → Labels (2026-07-22) — no se pudo hacer por API/conector
+  en esta sesion (el conector de GitHub solo expone lectura de labels,
+  `get_label`, sin ninguna herramienta de escritura). Con esto,
+  `.github/ISSUE_TEMPLATE/revision_clinica.md` ya etiqueta automaticamente
+  como corresponde al crear un issue con esa plantilla. Verificado con
+  `get_label` contra el repo real tras la creacion.
 
 ## [Unreleased] — Pasada 12: demo online y distribución verificada
 
