@@ -72,19 +72,19 @@ No hace falta revisar código ni instalar nada — alcanza con responder estas p
 
 Registro de a quién se le pidió revisión y en qué quedó, para no perder el hilo. Se actualiza a medida que hay novedades — sin inventar estados que no se confirmaron.
 
-| Organización | Estado (2026-07-15) | Detalle |
+| Organización | Estado (2026-07-22, vía Gmail) | Detalle |
 | :--- | :--- | :--- |
-| APAdeA (Asociación Argentina de Padres de Autistas) | Contactada — en espera | Respondieron por Instagram: "Pasamos tu mensaje al sector correspondiente. Te notificamos en caso de tener novedades." Es un acuse de recibo, no una revisión todavía. |
-| PANAACEA | Respondieron — reenviado a contacto directo | Pidieron reenviar el pedido a mmendez@panaacea.org (contacto directo dentro de la organización). Reenviado el 2026-07-20. En espera de la revisión propiamente dicha. |
-| Sociedad Argentina de Pediatría (SAP) — Comité de Crecimiento y Desarrollo | Candidata — no contactada aún | Sin canal de email directo verificado (los de los miembros del comité están ofuscados en su web). Contacto disponible: formulario en sap.org.ar/contacto o WhatsApp wa.link/yd90sg. |
-| FEPRA (Federación de Psicólogas y Psicólogos de la República Argentina) | Mail preparado — no enviado aún | Borrador listo en Gmail a info@fepra.org.ar, pidiendo derivación a un profesional con experiencia en infancia/TEA. |
-| Colegio de Psicólogos Distrito XI (La Plata) | Mail preparado — no enviado aún | Borrador listo en Gmail a distritoxi@colegiodepsicologos.org.ar. |
-| World Autism Organisation (WAO) | Mail preparado — no enviado aún | Direcciones info.wao22@gmail.com e info@worldautismorganisation.com confirmadas en su sitio oficial. |
-| Autismo España (Confederación) | Mail preparado — no enviado aún | Direcciones info@autismo.org.es y confederacion@autismo.org.es confirmadas en su sitio oficial. |
-| Fundación Miradas | Mail preparado — no enviado aún | Dirección fmiradas@fundacionmiradas.org confirmada en su sitio oficial. |
-| Plena Inclusión España | Mail preparado — no enviado aún | Dirección info@plenainclusion.org confirmada en su sitio oficial. |
-| Autism-Europe | Mail preparado — no enviado aún | Dirección real es secretariat@autismeurope.org (una lista externa traía dos direcciones distintas que no coincidían con la publicada). |
-| Autism Science Foundation | Mail preparado — no enviado aún | Dirección real es contactus@autismsciencefoundation.org (una lista externa traía info@, que no coincide con la publicada). |
+| APAdeA (Asociación Argentina de Padres de Autistas) | Contactada — en espera | Instagram: acuse de recibo ("Pasamos tu mensaje al sector correspondiente"). Mail a info@apadea.org.ar enviado 2026-07-15, sin respuesta todavía. |
+| PANAACEA | **Acción pendiente de Mariano, urgente** | Martín Mendez (Responsable de Comunicación) respondió 2026-07-21 pidiendo una videollamada breve "mañana miércoles" (=2026-07-22, hoy) para sacarse dudas antes de derivarlo a alguien que revise el proyecto. Pidió que Mariano proponga horario. **Sin responder todavía al momento de este registro.** |
+| Sociedad Argentina de Pediatría (SAP) — Comité de Crecimiento y Desarrollo | Candidata — no contactada aún | Sin canal de email directo verificado. Contacto disponible: formulario en sap.org.ar/contacto o WhatsApp wa.link/yd90sg. |
+| FEPRA (Federación de Psicólogas y Psicólogos de la República Argentina) | Enviado — sin respuesta | Mail a info@fepra.org.ar enviado 2026-07-20. Sin respuesta todavía. |
+| Colegio de Psicólogos Distrito XI (La Plata) | Enviado — sin respuesta | Mail a distritoxi@colegiodepsicologos.org.ar enviado 2026-07-20. Sin respuesta todavía. |
+| World Autism Organisation (WAO) | Enviado — una dirección rebotó | Mail enviado 2026-07-20 a ambas direcciones. `info@worldautismorganisation.com` rebotó (dirección inexistente, notificación de Google). `info.wao22@gmail.com` sin respuesta todavía. |
+| Autismo España (Confederación) | Respondieron — redirigen, no revisan directamente | investigacion@autismo.org.es respondió 2026-07-21: sugieren dirigirse a alguna de las entidades socias/vinculadas listadas en su web, en vez de revisar ellos mismos. No es una revisión ni un acuse de derivación concreta — queda en Mariano elegir una entidad de esa lista y contactarla. |
+| Fundación Miradas | Enviado — sin respuesta | Mail a fmiradas@fundacionmiradas.org enviado 2026-07-20. Sin respuesta todavía. |
+| Plena Inclusión España | **Respuesta positiva, en curso** | Sofía Reyes (responsable de infancia / coordinadora técnica) respondió 2026-07-22 ofreciendo compartirlo con "la red de infancia de España". Mariano ya respondió el mismo día señalándole el repositorio. En seguimiento activo. |
+| Autism-Europe | Enviado — solo autorespuesta | Mail en inglés enviado 2026-07-20 a secretariat@autismeurope.org. Respuesta automática de Aurélie Baranger (Director): está de licencia hasta el 19 de agosto. Sin respuesta sustantiva todavía. |
+| Autism Science Foundation | Enviado — sin respuesta | Mail en inglés a contactus@autismsciencefoundation.org enviado 2026-07-20. Sin respuesta todavía. |
 
 ### Contactos por Instagram (2026-07-20)
 
