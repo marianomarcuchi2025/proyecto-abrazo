@@ -2,6 +2,48 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html) en la medida en que un MVP pre-1.0 puede hacerlo.
 
+## [Unreleased] — Pasada 13: consistencia documentacion vs. codigo real
+
+Auditoria de un documento externo (generado por otra IA) sobre cumplimiento
+legal (COPPA/GDPR-K) y comparacion con apps de referencia. Varios datos
+verificados como correctos (precio Proloquo2Go, respaldo de UNICEF a
+Cboard, monto de la multa de COPPA, acuerdo Disney-FTC), pero se detectaron
+dos organizaciones inventadas en la lista de contactos sugeridos ("AADEA"
+y "APADA" no existen — son variantes corruptas de APAdeA, ya contactada) y
+una aplicabilidad legal presentada como certeza cuando es una pregunta
+abierta (COPPA regula "operadores comerciales", no queda claro que aplique
+igual a software libre autoalojado). No se creo ningun documento de
+cumplimiento a partir de eso sin antes consultar a un abogado real.
+
+Esa revision disparo una auditoria propia de consistencia interna,
+encontrando 3 casos reales de documentacion desactualizada respecto al
+codigo:
+
+### Corregido
+- `SECURITY.md`: la seccion "Alcance conocido" todavia decia "falta de
+  autenticacion en el backend" y "persistencia en memoria" — ambas
+  quedaron resueltas desde la Pasada 6 (API key opcional, persistencia en
+  disco). Corregido para reflejar las limitaciones reales vigentes.
+- `README.md`: el bullet "Demo publica real ... todavia no existe" seguia
+  ahi pese a que la demo se desplego en la Pasada 12. Corregido.
+- `CONTRIBUTING.md`, `docs/COMUNIDAD.md` y
+  `.github/ISSUE_TEMPLATE/bug_report.md` le pedian a colaboradores
+  externos usar las etiquetas `clinical-review` y `safety-critical` — que
+  no existen en el repo (verificado contra la lista real de labels de
+  GitHub). Un colaborador sin permiso de escritura no puede crear una
+  etiqueta nueva, asi que la instruccion original lo dejaba bloqueado.
+  Se suavizo el texto para que no dependa de que la etiqueta ya exista.
+
+### Conocido / no resuelto en esta pasada
+- `.github/ISSUE_TEMPLATE/revision_clinica.md` sigue declarando
+  `labels: clinical-review` en su frontmatter. Como esa etiqueta no
+  existe, GitHub simplemente no aplica ninguna al crear el issue (no
+  rompe nada, pero tampoco etiqueta automaticamente como se pretendia).
+  La unica forma real de cerrar esto es crear las dos etiquetas
+  (`clinical-review`, `safety-critical`) desde Settings → Labels — no se
+  pudo hacer por API/git en esta sesion (mismo bloqueo de permisos de
+  escritura ya documentado en pasadas anteriores).
+
 ## [Unreleased] — Pasada 12: demo online y distribución verificada
 
 ### Agregado

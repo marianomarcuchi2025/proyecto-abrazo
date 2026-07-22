@@ -124,7 +124,7 @@ Esto es lo que un lanzamiento real necesitaría y que este MVP todavía no cubre
 - **Cumplimiento normativo** para datos de menores (COPPA, GDPR-K o equivalente local) y una política de privacidad real.
 - **Base de datos transaccional real** — hoy es persistencia en archivos JSON (sobrevive reinicios, pero sin transacciones ni concurrencia segura entre procesos).
 - **Tests de interfaz (DOM) para `ui-nino`** — la lógica pura (respiración, dominio) tiene 26 tests entre `core` y `server`; los componentes Lit en sí (render, eventos de click) todavía no tienen tests automatizados.
-- **Demo pública real** (deploy verificable, video) — todavía no existe; hay una captura real de la pantalla principal arriba (`docs/capturas/principal.png`, tomada el 2026-07-14 corriendo la app localmente), pero faltan capturas de las otras 3 pantallas (ajustes, respiración guiada, "Quiero decir algo") y un deploy público. Correr `npm run dev` localmente sigue siendo la única forma de ver la app completa.
+- **Capturas y video completos** — la demo pública ya existe (ver arriba, desplegada en Pasada 12), pero faltan capturas de 3 de las 4 pantallas (ajustes, respiración guiada, "Quiero decir algo": solo está `docs/capturas/principal.png`) y un video demo corto.
 - Pruebas con usuarios reales (niños, cuidadores) antes de cualquier intento de distribución masiva.
 
 ## 📄 Licencia

@@ -22,5 +22,5 @@ labels: bug
 
 ## ¿Afecta el flujo de emergencia?
 
-- [ ] Sí → agregá también la etiqueta `safety-critical`
+- [ ] Sí → avisalo en el título ("[SEGURIDAD] ...") y agregá la etiqueta `safety-critical` si podés (si no tenés permiso para crearla, no hace falta — el mantenedor la agrega al verlo)
 - [ ] No

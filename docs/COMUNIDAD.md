@@ -8,7 +8,7 @@ Este proyecto necesita sobre todo aportes de gente que **no programa** — profe
 - Comentarios sueltos sobre el flujo de emergencia o el lenguaje, sin necesidad de formatear un reporte de bug.
 - Ideas que no son todavía un pedido concreto de cambio.
 
-Reservamos los **issues** para pedidos concretos y accionables (bugs, features específicas, revisión clínica con la etiqueta `clinical-review`).
+Reservamos los **issues** para pedidos concretos y accionables (bugs, features específicas, revisión clínica).
 
 ## Por qué no hay Discord/Matrix todavía
 

@@ -8,9 +8,12 @@ en el espectro autista — a regular sus emociones. Toda ayuda cuenta.
 ## Lo que más necesitamos
 
 1. **Revisión clínica** — si sos terapista ocupacional, psicólogo/a infantil
-   o profesional afín: abrí un issue con la etiqueta `clinical-review` con
-   tus observaciones sobre el flujo de emergencia y el lenguaje de la app.
-   No hace falta leer código: [`docs/REVISION_CLINICA_PENDIENTE.md`](docs/REVISION_CLINICA_PENDIENTE.md)
+   o profesional afín: abrí un issue con tus observaciones sobre el flujo de
+   emergencia y el lenguaje de la app (la etiqueta `clinical-review` todavía
+   no existe en el repo — si no podés crearla por no tener permiso de
+   escritura, no hace falta: mencioná "revisión clínica" en el título y el
+   mantenedor la etiqueta). No hace falta leer código:
+   [`docs/REVISION_CLINICA_PENDIENTE.md`](docs/REVISION_CLINICA_PENDIENTE.md)
    tiene el texto exacto que ve un niño en cada pantalla y preguntas puntuales
    para responder.
 2. **Accesibilidad** — auditorías contra WCAG 2.2 / W3C COGA.
@@ -47,7 +50,9 @@ Ver [`docs/COMUNIDAD.md`](docs/COMUNIDAD.md) — usá [GitHub Discussions](../..
 
 Abrí un issue con: qué esperabas, qué pasó, pasos para reproducir, y
 navegador/sistema operativo. Si el bug afecta el flujo de emergencia,
-marcalo como `safety-critical`.
+decilo explícitamente en el título/cuerpo (la etiqueta `safety-critical`
+todavía no existe en el repo; si no podés crearla, no hace falta — el
+mantenedor la va a etiquetar y priorizar en cuanto lo vea).
 
 ## Licencia
 
